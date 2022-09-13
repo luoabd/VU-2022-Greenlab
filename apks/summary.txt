@@ -28,6 +28,9 @@ package: name='com.zhiliaoapp.musically' versionCode='2022601030' versionName='2
 [Twitter_base.apk (5ac4e3244f55ed237cdef2d4c1ddf09e)]
 package: name='com.twitter.android' versionCode='29581000' versionName='9.58.1-release.0' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
 
+[Wikipedia_base.apk (12cd032c729f892dac185bd4d7e72c2f)]
+package: name='org.wikipedia' versionCode='50419' versionName='2.7.50419-r-2022-08-29' platformBuildVersionName='12' platformBuildVersionCode='32' compileSdkVersion='32' compileSdkVersionCodename='12'
+
 [YouTube_base.apk (9f26b048c6009c56df04c00c02ac46f0)]
 package: name='com.google.android.youtube' versionCode='1530779072' versionName='17.30.34' platformBuildVersionName='UpsideDownCake' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='UpsideDownCake'
 
