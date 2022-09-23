@@ -3,7 +3,7 @@ import pandas as pd
 import re
 from pathlib import Path
 
-SEED = 42
+SEED = 420
 
 # TODO: add comments
 # TODO: change paths
@@ -54,6 +54,6 @@ perm = list(range(len(final_csv)))
 random.shuffle(perm)
 
 
-output_name = str((Path(__file__).parent / 'final.csv').absolute())
+output_name = str((Path(__file__).parent / f'final_{SEED}.csv').absolute())
 pd.DataFrame(data={'Rank': page_rank, 'Domain': page_domain, 'Sampling index': perm}).sort_values(
     'Sampling index').to_csv(output_name, index=False)
