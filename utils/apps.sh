@@ -7,6 +7,7 @@ then
 fi
 
 cd "$(dirname "$0")"
+cd ../apks
 
 if [ "$1" == "install" ]
 then

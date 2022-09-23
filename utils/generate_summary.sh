@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
+cd ../apks
 
 # Override any old summary file
 echo -n "" > summary.txt
