@@ -37,16 +37,19 @@ then
    adb shell input keyevent 164
 fi
 
-# TODO we may decide to not clear data between runs (if so, exit script here)
-cd "$(dirname "$0")"
-cd ../apks
+if [ "$1" == "clear" ]
+then
+   cd "$(dirname "$0")"
+   cd ../apks
 
-for app in $(ls | grep ".apk$")
-do
-   package=$(aapt dump badging $app | grep package | awk '{print $2}' | sed s/name=//g | sed s/\'// | sed s/\'//)
-   echo -n "Clearing user data for $package..."
-   adb shell pm clear $package
-done
+   for app in $(ls | grep ".apk$")
+   do
+      package=$(aapt dump badging $app | grep package | awk '{print $2}' | sed s/name=//g | sed s/\'// | sed s/\'//)
+      echo -n "Clearing user data for $package..."
+      adb shell pm clear $package
+   done
+fi
 
+adb shell input keyevent KEYCODE_HOME # Make that is home
 sleep 3 # Wait a bit for everything to settle
 echo -e "\nDone!" 
