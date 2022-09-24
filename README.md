@@ -9,6 +9,8 @@ From this, the 10 subjects were manually selected.
 The file `apks/summary.txt` contains information about the native versions of the subjects and was generated using `utils/generate_summary.sh`.
 Use `utils/apps.sh` to (un)install the APKs for all subjects from this folder.  
 The script `utils/pre_run.sh` ensures that all experiments are conducted using a consistent device state.  
+Use `utils/tap_text.sh` to click on a UI element with text matching a given pattern through ADB.
+Use `utils/clear_cache.sh` to clear the cache (but not the data) of an application.
 
 ## Experiment
 The experiment can be run using the [android-runner](https://github.com/S2-group/android-runner) with `python3 <path to android-runner> experiments/<the experiment>/config.json`.
