@@ -1,15 +1,18 @@
 #! /bin/bash
 
-
-
 if [ $(adb devices -l | wc -l) -lt 3 ]
 then
    echo "No device connected!"
    exit 1
 fi
 
+echo "Enabling \"Stay awake\""
+adb shell svc power stayon true
+
 echo -n "Stopping all running apps..."
-for app in $(adb shell ps | grep apps | awk '{print $9}')
+# Get all processes by the user or the system which are a package name e.g. "com.myapp"
+running=$(adb shell ps | grep "^[us]" | awk '{print $9}' | grep "^[^\.].*\.")
+for app in $running
 do
    adb shell am force-stop $app
 done
@@ -45,4 +48,5 @@ do
    adb shell pm clear $package
 done
 
+sleep 3 # Wait a bit for everything to settle
 echo -e "\nDone!" 
