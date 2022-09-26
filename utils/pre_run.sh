@@ -26,7 +26,7 @@ echo "Turning off battery saver"
 adb shell settings put global low_power 1
 echo "Dimming screen"
 adb shell settings put system screen_brightness 0
-echo "Turning on airplane mode, but keep Wi-Fi"
+echo "Turning on airplane mode, but keeping Wi-Fi on"
 adb shell settings put global airplane_mode_radios wifi
 adb shell settings put global airplane_mode_on 1
 adb shell settings delete global airplane_mode_radios >/dev/null # Reset custom airplane settings
