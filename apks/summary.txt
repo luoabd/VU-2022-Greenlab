@@ -1,33 +1,36 @@
-[com.coupang.mobile.apk (89f7fa72baec0b52c550f88c7565bc59)]
+[com.coupang.mobile.apk (md5sum=89f7fa72baec0b52c550f88c7565bc59)]
 package: name='com.coupang.mobile' versionCode='210358' versionName='7.3.2' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
 
-[com.espn.score_center.apk (a88b07c8dc9d3e08c50d6b141791469c)]
+[com.espn.score_center.apk (md5sum=a88b07c8dc9d3e08c50d6b141791469c)]
 package: name='com.espn.score_center' versionCode='9287' versionName='6.74.0' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
 
-[com.google.android.youtube.apk (861f451d2f9a9ccb482efeafaf8e82e3)]
+[com.google.android.youtube.apk (md5sum=861f451d2f9a9ccb482efeafaf8e82e3)]
 package: name='com.google.android.youtube' versionCode='1531827648' versionName='17.38.34' platformBuildVersionName='UpsideDownCake' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='UpsideDownCake'
 
-[com.linkedin.android.apk (6cbb32651d50e4ad3e2487f5d35bb918)]
-package: name='com.linkedin.android' versionCode='164100' versionName='4.1.733' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
+[com.linkedin.android.apk (md5sum=11529f22355f5ab9b41c3aafadf482fb)]
+package: name='com.linkedin.android' versionCode='164401' versionName='4.1.735.1' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
 
-[com.pinterest.apk (5c05cc9e05ceaa6667f60c4aeba9fd60)]
+[com.pinterest.apk (md5sum=5c05cc9e05ceaa6667f60c4aeba9fd60)]
 package: name='com.pinterest' versionCode='10348010' versionName='10.34.0' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
 
-[com.shopee.tw.apk (ed09e48dc35d7ddbd5e0e60671039165)]
+[com.shopee.tw.apk (md5sum=ed09e48dc35d7ddbd5e0e60671039165)]
 package: name='com.shopee.tw' versionCode='689' versionName='2.93.14' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
 
-[com.soundcloud.android.apk (e7f57d97463c9593c1ca5169ea87fe84)]
+[com.soundcloud.android.apk (md5sum=e7f57d97463c9593c1ca5169ea87fe84)]
 package: name='com.soundcloud.android' versionCode='146080' versionName='2022.09.12-release' platformBuildVersionName='12' platformBuildVersionCode='32' compileSdkVersion='32' compileSdkVersionCodename='12'
 
-[com.spotify.music.apk (953c1c7feddec996edaf237d455b53d8)]
+[com.spotify.music.apk (md5sum=953c1c7feddec996edaf237d455b53d8)]
 package: name='com.spotify.music' versionCode='91491994' versionName='8.7.66.534' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
 
-[com.weather.Weather.apk (e6e785b1b8044b617d8399578a7f992f)]
+[com.spotify.musik.apk (md5sum=b6caa807cb79aa8e3aeffadca2159b30)]
+package: name='com.spotify.music' versionCode='91754376' versionName='8.7.68.568' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
+
+[com.weather.Weather.apk (md5sum=e6e785b1b8044b617d8399578a7f992f)]
 package: name='com.weather.Weather' versionCode='1056000116' versionName='10.56.0' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
 
-[org.mozilla.firefox.apk (e798a4a76e1bc7625bfdc14a030043a9)]
+[org.mozilla.firefox.apk (md5sum=e798a4a76e1bc7625bfdc14a030043a9)]
 package: name='org.mozilla.firefox' versionCode='2015904299' versionName='105.1.0' platformBuildVersionName='12' platformBuildVersionCode='32' compileSdkVersion='32' compileSdkVersionCodename='12'
 
-[tv.twitch.android.app.apk (6aee322f3d893dcad7ba1c26ae71f124)]
+[tv.twitch.android.app.apk (md5sum=6aee322f3d893dcad7ba1c26ae71f124)]
 package: name='tv.twitch.android.app' versionCode='1308000' versionName='13.8.0' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
 
