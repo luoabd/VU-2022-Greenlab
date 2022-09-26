@@ -19,10 +19,7 @@ package: name='com.shopee.tw' versionCode='689' versionName='2.93.14' platformBu
 [com.soundcloud.android.apk (md5sum=e7f57d97463c9593c1ca5169ea87fe84)]
 package: name='com.soundcloud.android' versionCode='146080' versionName='2022.09.12-release' platformBuildVersionName='12' platformBuildVersionCode='32' compileSdkVersion='32' compileSdkVersionCodename='12'
 
-[com.spotify.music.apk (md5sum=953c1c7feddec996edaf237d455b53d8)]
-package: name='com.spotify.music' versionCode='91491994' versionName='8.7.66.534' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
-
-[com.spotify.musik.apk (md5sum=b6caa807cb79aa8e3aeffadca2159b30)]
+[com.spotify.music.apk (md5sum=b6caa807cb79aa8e3aeffadca2159b30)]
 package: name='com.spotify.music' versionCode='91754376' versionName='8.7.68.568' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'
 
 [com.weather.Weather.apk (md5sum=e6e785b1b8044b617d8399578a7f992f)]

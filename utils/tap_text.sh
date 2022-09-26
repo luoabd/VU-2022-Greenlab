@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# Note! This script will likely impact performance and energy consumption, since it is IO intensive.
+
 text=$1
 if [ -z "$text" ]
 then
