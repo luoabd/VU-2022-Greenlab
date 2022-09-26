@@ -4,7 +4,7 @@
     "nokia": {}
   },
   "repetitions": 10,
-  "duration": 6000,
+  "duration": 60000,
   "monkeyrunner_path": "/var/ar-utils/monkeyrunner",
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profile.xml",
