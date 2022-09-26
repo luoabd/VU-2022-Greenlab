@@ -6,7 +6,6 @@ import re
 from AndroidRunner.Plugins.Profiler import Profiler
 from AndroidRunner import util
 
-
 class Network(Profiler):
 
     # noinspection PyUnusedLocal
@@ -35,18 +34,11 @@ class Network(Profiler):
         """Collect the data and clean up extra files on the device, save data in location set by 'set_output' """
         script = str((Path(__file__).parent / 'get_network_traffic_stats.sh').absolute())
         os.system(f'adb shell dumpsys netstats > {self.output_dir}/stats_after.txt')
+        self.compute_diff()
+        os.remove(os.path.join(self.output_dir, 'stats_before.txt'))
+        os.remove(os.path.join(self.output_dir, 'stats_after.txt'))
 
-    def unload(self, device):
-        """Stop the profiler, removing configuration files on device"""
-        pass
-
-    def set_output(self, output_dir):
-        """Set the output directory before the start_profiling is called"""
-        self.output_dir = output_dir
-
-    def aggregate_subject(self):
-        """Aggregate the data at the end of a subject, collect data and save data to location set by 'set output' """
-        filename = os.path.join(self.output_dir, 'Aggregated.csv')
+    def compute_diff(self):
         # Parse Xt stats
         tx_a = 0
         rx_a = 0
@@ -78,36 +70,63 @@ class Network(Profiler):
                 if match is not None:
                     rx_b += int(match.group(1))
                     tx_b += int(match.group(2))
-        print(f'rx_a: {rx_a}, tx_a: {tx_a}, rx_b: {rx_b}, tx_b: {tx_b}')
-        util.write_to_file(filename, [{'rx': rx_a - rx_b, 'tx': tx_a - tx_b}])
+        if not os.path.exists(os.path.join(self.output_dir, 'network.csv')):
+            os.system(f'echo "rx,tx" > {os.path.join(self.output_dir, "network.csv")}')
+        os.system(f'echo "{ rx_a - rx_b },{ tx_a - tx_b }" >> {self.output_dir}/network.csv')
+
+    def unload(self, device):
+        """Stop the profiler, removing configuration files on device"""
+        pass
+
+    def set_output(self, output_dir):
+        """Set the output directory before the start_profiling is called"""
+        self.output_dir = output_dir
+
+    def aggregate_subject(self):
+        """Aggregate the data at the end of a subject, collect data and save data to location set by 'set output' """
+        filename = os.path.join(self.output_dir, 'Aggregated.csv')
+        rx_mean = 0
+        tx_mean = 0
+        count = 0
+        with open(os.path.join(self.output_dir, 'network.csv'), 'r') as f:
+            f.readline()
+            for line in f:
+                rx, tx = line.strip().split(',')
+                rx_mean += int(rx)
+                tx_mean += int(tx)
+                count += 1
+        rx_mean /= count
+        tx_mean /= count
+        with open(filename, 'w') as f:
+            f.write(f'rx,tx\n')
+            f.write(f'{rx_mean},{tx_mean}\n')
+        
 
     def aggregate_end(self, data_dir, output_file):
         """Aggregate the data at the end of the experiment.
          Data located in file structure inside data_dir. Save aggregated data to output_file
         """
-        return
-        rows = self.aggregate_final(data_dir)
-        util.write_to_file(output_file, rows)
-
-
-    def aggregate_final(self, data_dir):
         rows = []
-        return rows
-        # TODO work in progress
+        def add_row(filename):
+            with open(filename, 'r') as f:
+                f.readline()
+                rx, tx = f.readline().strip().split(',')
+                row.update({'rx': rx, 'tx': tx})
+            rows.append(row.copy())
+
         for device in util.list_subdir(data_dir):
             row = OrderedDict({'device': device})
             device_dir = os.path.join(data_dir, device)
             for subject in util.list_subdir(device_dir):
                 row.update({'subject': subject})
+                print(f'Aggregating network for {device} {subject}')
                 subject_dir = os.path.join(device_dir, subject)
                 if os.path.isdir(os.path.join(subject_dir, 'network')):
-                    row.update(self.aggregate_battery_final(os.path.join(subject_dir, 'network')))
-                    rows.append(row.copy())
+                    add_row(os.path.join(subject_dir, 'network', 'Aggregated.csv'))
                 else:
                     for browser in util.list_subdir(subject_dir):
                         row.update({'browser': browser})
                         browser_dir = os.path.join(subject_dir, browser)
-                        if os.path.isdir(os.path.join(browser_dir, 'batterystats')):
-                            row.update(self.aggregate_battery_final(os.path.join(browser_dir, 'network')))
-                            rows.append(row.copy())
-        return rows
+                        if os.path.isdir(os.path.join(browser_dir, 'network')):
+                            add_row(os.path.join(browser_dir, 'network', 'Aggregated.csv'))
+        util.write_to_file(output_file, rows)
