@@ -31,9 +31,11 @@
       "python2_path": "python2"
       
     },
-    "network": {
-
-    }
+    "frametimes2": {
+      "subject_aggregation" : "default",
+      "sample_interval": 1000
+    },
+    "network": { }
   },
   "scripts": {
     "before_experiment": "Scripts/before_experiment.py",

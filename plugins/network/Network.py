@@ -23,7 +23,6 @@ class Network(Profiler):
 
     def start_profiling(self, device, **kwargs):
         """Start the profiling process"""
-        script = str((Path(__file__).parent / 'get_network_traffic_stats.sh').absolute())
         os.system(f'adb shell dumpsys netstats > {self.output_dir}/stats_before.txt')
 
     def stop_profiling(self, device, **kwargs):
@@ -32,7 +31,6 @@ class Network(Profiler):
 
     def collect_results(self, device):
         """Collect the data and clean up extra files on the device, save data in location set by 'set_output' """
-        script = str((Path(__file__).parent / 'get_network_traffic_stats.sh').absolute())
         os.system(f'adb shell dumpsys netstats > {self.output_dir}/stats_after.txt')
         self.compute_diff()
         os.remove(os.path.join(self.output_dir, 'stats_before.txt'))
