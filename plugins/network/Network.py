@@ -23,7 +23,8 @@ class Network(Profiler):
 
     def start_profiling(self, device, **kwargs):
         """Start the profiling process"""
-        os.system(f'adb shell dumpsys netstats > {self.output_dir}/stats_before.txt')
+        script = str((Path(__file__).parent.readlink().parent.parent / 'utils' / 'get_network_usage.sh').absolute())
+        os.system(f"{script} > {self.output_dir}/stats_before.txt")
 
     def stop_profiling(self, device, **kwargs):
         """Stop the profiling process"""
@@ -31,7 +32,8 @@ class Network(Profiler):
 
     def collect_results(self, device):
         """Collect the data and clean up extra files on the device, save data in location set by 'set_output' """
-        os.system(f'adb shell dumpsys netstats > {self.output_dir}/stats_after.txt')
+        script = str((Path(__file__).parent.readlink().parent.parent / 'utils' / 'get_network_usage.sh').absolute())
+        os.system(f"{script} > {self.output_dir}/stats_after.txt")
         self.compute_diff()
         os.remove(os.path.join(self.output_dir, 'stats_before.txt'))
         os.remove(os.path.join(self.output_dir, 'stats_after.txt'))
@@ -41,33 +43,13 @@ class Network(Profiler):
         tx_a = 0
         rx_a = 0
         with open(os.path.join(self.output_dir, 'stats_after.txt'), 'r') as f:
-            while True:
-                line = f.readline()
-                if not line or line.startswith('Xt stats:'):
-                    break
-            while True:
-                line = f.readline()
-                if not line or line.strip().endswith('stats:'):
-                    break
-                match = re.match(r'.*rb=([0-9]+).*tb=([0-9]+).*', line)
-                if match is not None:
-                    rx_a += int(match.group(1))
-                    tx_a += int(match.group(2))
+            rx_a = int(f.readline().strip('\n'))
+            tx_a = int(f.readline().strip('\n'))
         tx_b = 0
         rx_b = 0
         with open(os.path.join(self.output_dir, 'stats_before.txt'), 'r') as f:
-            while True:
-                line = f.readline()
-                if not line or line.startswith('Xt stats:'):
-                    break
-            while True:
-                line = f.readline()
-                if not line or line.strip().endswith('stats:'):
-                    break
-                match = re.match(r'.*rb=([0-9]+).*tb=([0-9]+).*', line)
-                if match is not None:
-                    rx_b += int(match.group(1))
-                    tx_b += int(match.group(2))
+            rx_b = int(f.readline().strip('\n'))
+            tx_b = int(f.readline().strip('\n'))
         if not os.path.exists(os.path.join(self.output_dir, 'network.csv')):
             os.system(f'echo "rx,tx" > {os.path.join(self.output_dir, "network.csv")}')
         os.system(f'echo "{ rx_a - rx_b },{ tx_a - tx_b }" >> {self.output_dir}/network.csv')

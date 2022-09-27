@@ -5,7 +5,6 @@
   },
   "repetitions": 10,
   "duration": 60000,
-  "monkeyrunner_path": "/var/ar-utils/monkeyrunner",
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profile.xml",
   "browsers": [
@@ -28,7 +27,7 @@
       "subject_aggregation": "default",
       "experiment_aggregation": "default",
       "enable_systrace_parsing": false,
-      "python2_path": "python2"
+      "python2_path": "/usr/bin/python2"
       
     },
     "frametimes2": {
