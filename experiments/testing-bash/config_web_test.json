@@ -1,12 +1,12 @@
 {
   "type": "web",
   "devices": {
-    "nokia": {}
+    "g9play": {}
   },
-  "repetitions": 10,
-  "duration": 60000,
+  "repetitions": 3,
+  "duration": 360000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
-  "powerprofile_path": "/var/ar-utils/power_profile.xml",
+  "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
   "browsers": [
     "firefox"
   ],

@@ -39,7 +39,6 @@ class Network(Profiler):
         os.remove(os.path.join(self.output_dir, 'stats_after.txt'))
 
     def compute_diff(self):
-        # Parse Xt stats
         tx_a = 0
         rx_a = 0
         with open(os.path.join(self.output_dir, 'stats_after.txt'), 'r') as f:
