@@ -7,6 +7,7 @@ import csv
 
 from AndroidRunner.Plugins.Profiler import Profiler
 
+BROWSER_PACKAGE = 'org.mozilla.firefox'
 
 class ConfigError(Exception):
     pass
@@ -45,7 +46,7 @@ class Frametimes2(Profiler):
         """Runs the profiling methods every self.interval seconds in a separate thread"""
         start = timeit.default_timer()
         if app is None:
-            app = 'org.mozilla.firefox'
+            app = BROWSER_PACKAGE
         for frame in self.get_frame_times(device, app):
             self.data.add(tuple(frame))
         end = timeit.default_timer()

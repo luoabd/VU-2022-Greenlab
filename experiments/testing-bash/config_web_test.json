@@ -43,9 +43,7 @@
     "interaction": [
       {
         "type": "python3",
-        "path": "Scripts/interaction.py",
-        "timeout": 500,
-        "logcat_regex": "some keyword"
+        "path": "Scripts/interaction.py"
       }
     ],
     "before_close": "Scripts/before_close.py",
