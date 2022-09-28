@@ -10,7 +10,7 @@ The file `utils/Candidate_subjects.csv` was generated using `utils/generate_cand
 From this, the 10 subjects were manually selected.  
 The file `apks/summary.txt` contains information about the native versions of the subjects and was generated using `utils/generate_summary.sh`.
 Use `utils/apps.sh` to (un)install the APKs for all subjects from this folder.  
-The script `utils/pre_run.sh` ensures that all experiments are conducted using a consistent device state. (Append `killall` to stop all currently running apps and `clear` to delete all app data.)
+The script `utils/before_run.sh` ensures that all experiments are conducted using a consistent device state. (Append `killall` to stop all currently running apps and `clear` to delete all app data.)
 Use `utils/tap_text.sh` to click on a UI element with text matching a given pattern through ADB.
 Use `utils/clear_cache.sh` to clear the cache (but not the data) of an application.
 Use `utils/current_app.sh` and `utils/current_url.sh` to query the currently running native or web app respectively over ADB.

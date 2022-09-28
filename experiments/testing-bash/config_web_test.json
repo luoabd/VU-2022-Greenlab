@@ -32,7 +32,7 @@
     },
     "frametimes2": {
       "subject_aggregation" : "default",
-      "sample_interval": 1000
+      "sample_interval": 100
     },
     "network": { }
   },
