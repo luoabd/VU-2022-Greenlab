@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # precondition: soundcloud.com is already opened in the browser (NOT logged in)
-# postcondition: endless playback of a random song (player maximized)
+# postcondition: endless playback of random songs (player maximized)
 
 # Check device resolution
 test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! Expected 1080x2340 device."
