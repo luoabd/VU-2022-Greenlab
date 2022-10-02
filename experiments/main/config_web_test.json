@@ -1,12 +1,12 @@
 {
   "type": "web",
   "devices": {
-    "g9play": {}
+    "moto_g9play": {}
   },
-  "repetitions": 3,
-  "duration": 360000,
+  "repetitions": 1,
+  "duration": 6000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
-  "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
+  "powerprofile_path": "/var/ar-utils/power_profiles/moto_g9play.xml",
   "browsers": [
     "firefox"
   ],
@@ -26,7 +26,7 @@
     "batterystats": {
       "subject_aggregation": "default",
       "experiment_aggregation": "default",
-      "enable_systrace_parsing": false,
+      "enable_systrace_parsing": true,
       "python2_path": "/usr/bin/python2"
       
     },
