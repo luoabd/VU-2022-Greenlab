@@ -18,7 +18,7 @@ adb shell input tap 50 150
 adb shell input tap 900 150
 sleep 1
 # Look up 24/7 stream (animals)
-adb shell input text 'CritterVision'
+adb shell input text "CritterVision"
 adb shell input keyevent 66
 
 # Open video

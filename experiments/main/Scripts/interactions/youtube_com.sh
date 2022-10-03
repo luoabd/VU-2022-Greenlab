@@ -19,7 +19,7 @@ adb shell input tap 50 150
 # Open search
 adb shell input tap 900 150
 # Look up 10h video (very nice music)
-adb shell input text 'UcRtFYAz2Yo'
+adb shell input text "UcRtFYAz2Yo"
 adb shell input keyevent 66
 
 # Open video
