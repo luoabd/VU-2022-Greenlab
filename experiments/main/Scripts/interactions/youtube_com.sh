@@ -1,7 +1,7 @@
 #! /bin/bash
 
-# precondition: 
-# postcondition: 
+# precondition: youtube.com is already opened in the browser
+# postcondition: video is playing (10h video)
 
 # Check device resolution
 test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! Expected 1080x2340 device."
