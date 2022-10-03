@@ -8,8 +8,9 @@ test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! 
 
 # Loop for 360 seconds (6 minutes)
 START=$(date +%s)
-while [ $(($(date +%s) - $START)) -lt 360 ]
+while [ $(($(date +%s) - $START)) -lt 345 ] # Leave 15 seconds slack for the last interaction
 do
+    # Main interaction loop (takes roughly 11 seconds)
     # Scroll down
     adb shell input swipe 500 2000 500 1000
     adb shell input swipe 500 2000 500 1000
