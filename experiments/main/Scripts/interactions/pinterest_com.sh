@@ -32,10 +32,7 @@ adb shell input tap 700 1700
 adb shell input tap 700 1400
 sleep 3
 
-# Loop for 360 seconds (6 minutes)
-while [ $(($(date +%s) - $START)) -lt 330 ] # Leave 30 seconds slack for the last interaction
-do
-    # Main interaction loop (takes roughly 24 seconds)
+function interact()  {
     # Scroll down
     adb shell input swipe 500 2000 500 1000
     sleep 1
@@ -47,11 +44,11 @@ do
     adb shell input tap 300 1000
     sleep 1
     # Close ad for native pinterest app
-    # If already on the post page, scroll a bit down first to open at worst another post
-    adb shell input swipe 500 2000 500 100
-    sleep 1
-    # ...then click on the close button (or open another post below the post)
-    adb shell input tap 90 1700
+    if [ "$1" == "first" ]
+    then
+        # ...then click on the close button (or open another post below the post)
+        adb shell input tap 90 1550
+    fi
     sleep 1
     adb shell input swipe 500 800 500 200
     sleep 1
@@ -61,11 +58,13 @@ do
     sleep 1
     # Go back
     adb shell input keyevent 4
-    sleep 1
-    # Scroll a bit up to make sure the back button is visible
-    adb shell input swipe 500 200 500 600
-    sleep 2
-    # Press home button
-    adb shell input tap 150 2050
-    sleep 1
+}
+
+# Handle ad for native app
+interact first
+# Loop for 360 seconds (6 minutes)
+while [ $(($(date +%s) - $START)) -lt 330 ] # Leave 30 seconds slack for the last interaction
+do
+    # Main interaction loop (takes roughly 24 seconds)
+    interact
 done
