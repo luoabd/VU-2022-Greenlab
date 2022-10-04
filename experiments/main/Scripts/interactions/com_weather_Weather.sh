@@ -24,9 +24,9 @@ do
     sleep 1
     adb shell input swipe 500 2000 500 500
     sleep 1
+    # 10 day forecast
     adb shell input tap 300 2200
     sleep 1
-    # 10 day forecast
     for i in {1..9}
     do
         adb shell input tap 30 350

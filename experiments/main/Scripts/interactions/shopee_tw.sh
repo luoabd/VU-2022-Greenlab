@@ -8,16 +8,25 @@ test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! 
 
 START=$(date +%s)
 
-# TODO: Adjust values for test device
-function interact() {
+# Wait for any ad pop-up to appear
+sleep 3
+# Close ad pop-up
+adb shell input tap 20 150
+# Open category
+adb shell input tap 830 650
+sleep 1
+
+while [ $(($(date +%s) - $START)) -lt 320 ] # Leave about 5 seconds slack for the last interaction
+do
+    # Main interaction loop (takes roughly 35 seconds)
     # Scroll down
-    adb shell input swipe 500 1300 500 250
+    adb shell input swipe 500 1300 500 50
     sleep 1
-    adb shell input swipe 500 1300 500 250
+    adb shell input swipe 500 1300 500 50
     sleep 1
-    adb shell input swipe 500 1300 500 250
+    adb shell input swipe 500 1300 500 50
     sleep 1
-    adb shell input swipe 500 1300 500 250
+    adb shell input swipe 500 1300 500 50
     sleep 3
 
     # Open product
@@ -25,11 +34,11 @@ function interact() {
     sleep 3
 
     # Scroll right (product images)
-    adb shell input swipe 600 500 135 500
+    adb shell input swipe 600 500 35 500
     sleep 2
-    adb shell input swipe 600 500 135 500
+    adb shell input swipe 600 500 35 500
     sleep 2
-    adb shell input swipe 600 500 135 500
+    adb shell input swipe 600 500 35 500
     sleep 2
 
     # Scroll down
@@ -43,16 +52,4 @@ function interact() {
     # Go back to the previous page
     adb shell input tap 45 87
     sleep 3
-}
-
-# Wait for any ad pop-up to appear
-sleep 3
-# Open category
-adb shell input tap 555 515
-sleep 1
-
-while [ $(($(date +%s) - $START)) -lt 330 ] # Leave 30 seconds slack for the last interaction
-do
-    # Main interaction loop (takes roughly 30 seconds)
-    interact
 done
