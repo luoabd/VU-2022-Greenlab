@@ -51,7 +51,6 @@ do
     sleep 2
 
     let "iter+=1" 
-    (($iter % 5 == 0)) && 
     if [ $(expr $iter % 5) == "0" ]; then
         # Go to next page
         adb shell input swipe 500 1300 500 250
