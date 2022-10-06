@@ -1,5 +1,5 @@
-[com.coupang.mobile.apk (md5sum=89f7fa72baec0b52c550f88c7565bc59)]
-package: name='com.coupang.mobile' versionCode='210358' versionName='7.3.2' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
+[com.coupang.mobile.apk (md5sum=c2b6d0f262a7e060b3ccb7cf4ea30667)]
+package: name='com.coupang.mobile' versionCode='210353' versionName='7.2.7' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
 
 [com.espn.score_center.apk (md5sum=a88b07c8dc9d3e08c50d6b141791469c)]
 package: name='com.espn.score_center' versionCode='9287' versionName='6.74.0' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
