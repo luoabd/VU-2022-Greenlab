@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import random
+import sys
 import pandas as pd
 import re
 from pathlib import Path
@@ -8,7 +9,14 @@ from pathlib import Path
 SEED = 420
 
 # TODO: add comments
-# TODO: change paths
+
+if len(sys.argv) != 3:
+    print(
+        f'Usage: {__file__.split("/")[-1]} <path to Google-Playstore.csv> <path to tranco.csv>')
+    exit(1)
+
+google_playstore_csv = sys.argv[1]
+tranco_csv = sys.argv[2]
 
 
 def find_first(name):
@@ -20,12 +28,11 @@ def find_first(name):
     return (-1, None)
 
 
-app_df = pd.read_csv('/home/luoabd/Downloads/Google-Playstore.csv')
+app_df = pd.read_csv(google_playstore_csv)
 processed_app_df = app_df.sort_values(by=["Minimum Installs"], ascending=False)
 processed_app_df = processed_app_df.head(2000)
 
-web_df = pd.read_csv('/home/luoabd/Downloads/tranco_5Y7PN.csv',
-                     nrows=2000, names=["ID", "name"])
+web_df = pd.read_csv(tranco_csv, nrows=2000, names=["ID", "name"])
 
 processed_app_df['App Name'] = processed_app_df['App Name'].str.lower()
 processed_app_df['App Name'] = processed_app_df['App Name'].apply(
@@ -56,6 +63,7 @@ perm = list(range(len(final_csv)))
 random.shuffle(perm)
 
 
-output_name = str((Path(__file__).parent / f'Candidate_subjects.csv').absolute())
+output_name = str(
+    (Path(__file__).parent / f'Candidate_subjects.csv').absolute())
 pd.DataFrame(data={'Rank': page_rank, 'Domain': page_domain, 'Sampling index': perm}).sort_values(
     'Sampling index').to_csv(output_name, index=False)

@@ -16,7 +16,7 @@ Use `utils/clear_cache.sh` to clear the cache (but not the data) of an applicati
 Use `utils/current_app.sh` and `utils/current_url.sh` to query the currently running native or web app respectively over ADB.
 
 ## Experiment
-The experiment can be run using the [Android Runner](https://github.com/S2-group/android-runner) with `python3 <path to android-runner> experiments/<the experiment>/config.json`.
+The experiment can be run using the [Android Runner](https://github.com/S2-group/android-runner) with `python3 <path to android-runner> experiments/config_<part>.json`.
 All files needed by the configuration should be placed in `/var/ar-utils`.
 
 ## Plugins

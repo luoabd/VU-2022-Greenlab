@@ -4,14 +4,14 @@
     "nokia_6_2": {}
   },
   "repetitions": 1,
-  "duration": 6000,
+  "duration": 360000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
   "browsers": [
     "firefox"
   ],
   "paths": [
-    "https://amazon.com/"
+    "https://youtube.com/"
   ],
   "profilers": {
     "android": {

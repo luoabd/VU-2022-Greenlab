@@ -6,22 +6,7 @@ from typing import Dict
 import time
 import logging
 
-LOGGER = logging.getLogger()
-
-# Generally, after every action, we need to wait for the display to update.
-# The time to update varies.
-
-def tap(device: Device, x: int, y: int, sleep = 1) -> None:
-    device.shell(f'input tap {x} {y}')
-    time.sleep(sleep)
-
-def write_text(device: Device, text: str, sleep = 1) -> None:
-    device.shell(f'input text \'{text}\'')
-    time.sleep(sleep)
-
-def swipe(device: Device, x1: int, y1: int, x2: int, y2: int, sleep = 4, duration = 1000):
-    device.shell(f'input swipe {x1} {y1} {x2} {y2} {duration}')
-    time.sleep(sleep)                                                                                                                                                                                            
+LOGGER = logging.getLogger()                                                                                                                                                                                          
                                                                                                                                                                                                                  
 def main(device: Device, *args, **kwargs) -> None:                                                                                                                                                               
     LOGGER.debug(args)                                                                                                                                                                                           
@@ -48,4 +33,4 @@ def main(device: Device, *args, **kwargs) -> None:
     print('Stopping interaction script')
     os.system('ps -auxf | grep "{script.split("/")[-1]}' + '" | head -n 1 | awk \'{print $2}\'')
     kill_cmd = f'kill -s 9 $(ps -auxf | grep "bash[^*]*{script.split("/")[-1].split(".")[0]}' + '" | awk \'{print $2}\')'
-    os.system(kill_cmd)
+    os.system(f'{kill_cmd} 2>/dev/null')
