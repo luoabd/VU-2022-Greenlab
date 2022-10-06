@@ -1,13 +1,12 @@
 {
   "type": "web",
   "devices": {
-    "s9+": {}
+    "nokia_6_2": {}
   },
   "repetitions": 1,
-  "duration": 60000,
-  "monkeyrunner_path": "/opt/android-sdk/tools/bin/monkeyrunner",
-  "systrace_path": "/opt/android-sdk/platform-tools/systrace/systrace.py",
-  "powerprofile_path": "/home/luoabd/power_profile.xml",
+  "duration": 6000,
+  "systrace_path": "/var/ar-utils/systrace/systrace.py",
+  "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
   "browsers": [
     "firefox"
   ],
@@ -24,13 +23,18 @@
         "mem"
       ]
     },
-      "batterystats": {
-        "subject_aggregation": "default",
-        "experiment_aggregation": "default",
-        "enable_systrace_parsing": false,
-        "python2_path": "python2"
-        
-      }
+    "batterystats": {
+      "subject_aggregation": "default",
+      "experiment_aggregation": "default",
+      "enable_systrace_parsing": true,
+      "python2_path": "/usr/bin/python2"
+      
+    },
+    "frametimes2": {
+      "subject_aggregation" : "default",
+      "sample_interval": 100
+    },
+    "network": { }
   },
   "scripts": {
     "before_experiment": "Scripts/before_experiment.py",
@@ -39,14 +43,12 @@
     "interaction": [
       {
         "type": "python3",
-        "path": "Scripts/interaction.py",
-        "timeout": 500,
-        "logcat_regex": "some keyword"
+        "path": "Scripts/interaction.py"
       }
     ],
     "before_close": "Scripts/before_close.py",
     "after_run": "Scripts/after_run.py",
     "after_experiment": "Scripts/after_experiment.py"
   },
-  "time_between_run": 5000
+  "time_between_run": 30000
 }

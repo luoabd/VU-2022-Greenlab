@@ -1,17 +1,14 @@
 {
-  "type": "web",
+  "type": "native",
   "devices": {
-    "moto_g9play": {}
+    "nokia_6_2": {}
   },
   "repetitions": 1,
   "duration": 6000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
-  "powerprofile_path": "/var/ar-utils/power_profiles/moto_g9play.xml",
-  "browsers": [
-    "firefox"
-  ],
-  "paths": [
-    "https://amazon.com/"
+  "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
+  "apps": [
+    "com.google.android.youtube"
   ],
   "profilers": {
     "android": {
@@ -50,5 +47,5 @@
     "after_run": "Scripts/after_run.py",
     "after_experiment": "Scripts/after_experiment.py"
   },
-  "time_between_run": 5000
+  "time_between_run": 30000
 }

@@ -13,8 +13,8 @@ START=$(date +%s)
 
 # Log in
 cd "$(dirname "$0")"
-USER=$(cat credentials.csv | grep "^spotify" | awk -F "," '{print $2}')
-PASS=$(cat credentials.csv | grep "^spotify" | awk -F "," '{print $3}')
+USER=$(cat credentials.csv | grep "^pinterest" | awk -F "," '{print $2}')
+PASS=$(cat credentials.csv | grep "^pinterest" | awk -F "," '{print $3}')
 adb shell input tap 700 1050
 sleep 2
 adb shell input tap 700 500
