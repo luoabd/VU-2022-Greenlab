@@ -22,7 +22,7 @@ def main(device: Device, *args, **kwargs) -> None:
         subject = path.split('/')[2]
     else:
         subject = path # package name
-    subject = subject.replace('.', '_')
+    subject = subject.replace('.', '_').lower()
     script=str((Path(__file__).parent / 'interactions' / f'{subject}.sh').absolute())
     print(f'Starting interaction script "{script}"')
     os.system(f'{script} &')
