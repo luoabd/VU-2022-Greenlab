@@ -17,6 +17,7 @@ def main(device: Device, *args, **kwargs) -> None:
     LOGGER.debug(current_run)                                                                                                                                                                                  
 
     path = current_run['path']
+    os.system(f'echo "{path}" > /tmp/android-runner_last-path')
     subject = ''
     if path.startswith('http://') or path.startswith('https://'):
         subject = path.split('/')[2]
