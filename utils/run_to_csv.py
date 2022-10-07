@@ -33,15 +33,18 @@ def get_value_network(profiler_result_dir, repetition):
 
 
 def get_value_android(profiler_result_dir, repetition):
-    result = list(profiler_result_dir.glob(f"*_*.csv"))[repetition]
-    cpu = []
-    mem = []
-    with open(result, 'r') as f:
-        f.readline()
-        for line in f:
-            cpu.append(float(line.split(',')[1]))
-            mem.append(float(line.split(',')[2]))
-    print(f"{sum(cpu)/len(cpu)},{sum(mem)/len(mem)}", end='')
+    try:
+        result = list(profiler_result_dir.glob(f"*_*.csv"))[repetition]
+        cpu = []
+        mem = []
+        with open(result, 'r') as f:
+            f.readline()
+            for line in f:
+                cpu.append(float(line.split(',')[1]))
+                mem.append(float(line.split(',')[2]))
+        print(f"{sum(cpu)/len(cpu)},{sum(mem)/len(mem)}", end='')
+    except:
+        print('n/a,n/a', end='')
 
 
 def get_value_frametimes2(profiler_result_dir, repetition):

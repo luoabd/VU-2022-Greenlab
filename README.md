@@ -23,3 +23,7 @@ All files needed by the configuration should be placed in `/var/ar-utils`.
 ## Plugins
 The custom plugins are located in `plugins/`.
 To install them, create a symbolic link for each plugin folder inside the android-runner plugin folder (`ln -s plugins/<plugin> <path to android-runner>/AndroidRunner/Plugins/<plugin>`).
+
+## Data Analysis
+The data analysis is performed using the [R](https://www.r-project.org/) programming language.
+All corresponding scripts are located in `analysis/`.
