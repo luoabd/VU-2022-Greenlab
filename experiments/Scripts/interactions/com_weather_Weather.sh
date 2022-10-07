@@ -12,7 +12,7 @@ START=$(date +%s)
 sleep 5
 
 # Loop for 360 seconds (6 minutes)
-while [ $(($(date +%s) - $START)) -lt 250 ] # Leave 1 or 2 seconds slack for the last interaction
+while true
 do
     # Main interaction loop (takes roughly 108 seconds)
     # hourly forecast

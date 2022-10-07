@@ -16,7 +16,7 @@ adb shell input tap 20 150
 adb shell input tap 830 650
 sleep 1
 
-while [ $(($(date +%s) - $START)) -lt 320 ] # Leave about 5 seconds slack for the last interaction
+while true
 do
     # Main interaction loop (takes roughly 35 seconds)
     # Scroll down

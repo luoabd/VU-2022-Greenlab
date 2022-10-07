@@ -17,7 +17,7 @@ adb shell input tap 600 1300
 adb shell input tap 950 950
 sleep 1
 
-while [ $(($(date +%s) - $START)) -lt 320 ] # Leave about 5 seconds slack for the last interaction
+while true
 do
     # Main interaction loop (takes roughly 35 seconds)
     # Open product

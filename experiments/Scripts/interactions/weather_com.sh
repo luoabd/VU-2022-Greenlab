@@ -14,9 +14,8 @@ adb shell input tap 700 1850
 sleep 2
 
 # Loop for 360 seconds (6 minutes)
-while [ $(($(date +%s) - $START)) -lt 330 ] # Leave 2 seconds slack for the last interaction
+while true
 do
-    LOOP_START=$(date +%s)
     # Main interaction loop (takes roughly 27 seconds)
     # hourly forecast
     adb shell input tap 300 2050
@@ -35,5 +34,4 @@ do
     # Radar
     adb shell input tap 750 2200
     sleep 10
-    echo "Loop took $(($(date +%s) - $LOOP_START)) seconds."
 done

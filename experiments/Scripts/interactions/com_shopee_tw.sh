@@ -19,7 +19,7 @@ sleep 2
 adb shell input tap 950 500
 sleep 2
 
-while [ $(($(date +%s) - $START)) -lt 315 ] # Leave about 5 seconds slack for the last interaction
+while true
 do
     # Main interaction loop (takes roughly 40 seconds)
     # Skip the multiple promotions

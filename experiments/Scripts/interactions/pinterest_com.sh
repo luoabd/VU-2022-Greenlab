@@ -63,7 +63,7 @@ function interact()  {
 # Handle ad for native app
 interact first
 # Loop for 360 seconds (6 minutes)
-while [ $(($(date +%s) - $START)) -lt 330 ] # Leave 30 seconds slack for the last interaction
+while true
 do
     # Main interaction loop (takes roughly 24 seconds)
     interact
