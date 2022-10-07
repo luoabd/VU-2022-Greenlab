@@ -10,7 +10,8 @@ distance=60 # Distance between headlines
 loc=790
 
 # Scroll down (to top headlines)
-adb shell input swipe 500 2000 500 50
+adb shell input swipe 500 450 500 0
+adb shell input swipe 500 450 500 0
 sleep 1
 
 while true
@@ -25,11 +26,11 @@ do
 
         # Scroll down
         adb shell input swipe 500 1300 500 250
-        sleep 1
+        sleep 10
         adb shell input swipe 500 1300 500 250
-        sleep 1
+        sleep 10
         adb shell input swipe 500 1300 500 250
-        sleep 2
+        sleep 20
 
         # Go back to the previous page
         adb shell input keyevent 4
