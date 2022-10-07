@@ -1,9 +1,9 @@
 {
   "type": "web",
   "devices": {
-    "nokia_6_2": {}
+    "moto_g9play": {}
   },
-  "repetitions": 1,
+  "repetitions": 3,
   "duration": 6000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
@@ -11,7 +11,8 @@
     "chrome"
   ],
   "paths": [
-    "https://youtube.com"
+    "https://youtube.com",
+    "https://twitch.tv"
   ],
   "profilers": {
     "android": {

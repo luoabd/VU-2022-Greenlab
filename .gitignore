@@ -4,6 +4,9 @@
 # Vim
 *.swp
 
+# R-Studio
+.Rproj
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -119,3 +122,4 @@ AndroidRunner/Plugins/monsoon/script/monsoon_config.csv
 # ignore any ouputs of experiments
 output/
 
+.Rproj.user

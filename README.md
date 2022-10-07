@@ -14,6 +14,7 @@ The script `utils/before_run.sh` ensures that all experiments are conducted usin
 Use `utils/tap_text.sh` to click on a UI element with text matching a given pattern through ADB.
 Use `utils/clear_cache.sh` to clear the cache (but not the data) of an application.
 Use `utils/current_app.sh` and `utils/current_url.sh` to query the currently running native or web app respectively over ADB.
+Use `utils/run_to_csv.py` to aggregate all measurements in a single table. 
 
 ## Experiment
 The experiment can be run using the [Android Runner](https://github.com/S2-group/android-runner) with `python3 <path to android-runner> experiments/config_<part>.json`.
@@ -22,5 +23,3 @@ All files needed by the configuration should be placed in `/var/ar-utils`.
 ## Plugins
 The custom plugins are located in `plugins/`.
 To install them, create a symbolic link for each plugin folder inside the android-runner plugin folder (`ln -s plugins/<plugin> <path to android-runner>/AndroidRunner/Plugins/<plugin>`).
-
-**TODO** Replace example experiment with own
