@@ -19,13 +19,9 @@ def main(device: Device, *args: tuple, **kwargs: dict):
     with open('/tmp/android-runner_last-path', 'r') as f:
         path = f.read().strip()
     print(f'Clearing cache for run of {path}')
-    cmd_clear_chrome = str((Path(__file__).parent.parent.parent / 'utils' / 'clear_chrome_browser_data.sh').absolute())
-    print(cmd_clear_chrome)
     if path.startswith('http://') or path.startswith('https://'):
         # print('Quit Firefox')
         # firefox_cleanup(device)
-        # chrome_cleanup(device)
         os.system(str((Path(__file__).parent.parent.parent / 'utils' / 'clear_chrome_browser_data.sh').absolute()))
-        pass
     else:
         os.system(f"{str((Path(__file__).parent.parent.parent / 'utils' / 'clear_cache.sh').absolute())} {path}")
