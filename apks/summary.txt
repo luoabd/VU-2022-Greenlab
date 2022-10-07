@@ -1,3 +1,6 @@
+[com.android.chrome.apk (md5sum=ff6d387a39a2d2a743eaec1a72633a3d)]
+package: name='com.android.chrome' versionCode='475808733' versionName='98.0.4758.87' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
+
 [com.coupang.mobile.apk (md5sum=c2b6d0f262a7e060b3ccb7cf4ea30667)]
 package: name='com.coupang.mobile' versionCode='210353' versionName='7.2.7' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
 
@@ -24,9 +27,6 @@ package: name='com.spotify.music' versionCode='91754376' versionName='8.7.68.568
 
 [com.weather.Weather.apk (md5sum=e6e785b1b8044b617d8399578a7f992f)]
 package: name='com.weather.Weather' versionCode='1056000116' versionName='10.56.0' platformBuildVersionName='12' platformBuildVersionCode='31' compileSdkVersion='31' compileSdkVersionCodename='12'
-
-[org.mozilla.firefox.apk (md5sum=e798a4a76e1bc7625bfdc14a030043a9)]
-package: name='org.mozilla.firefox' versionCode='2015904299' versionName='105.1.0' platformBuildVersionName='12' platformBuildVersionCode='32' compileSdkVersion='32' compileSdkVersionCodename='12'
 
 [tv.twitch.android.app.apk (md5sum=6aee322f3d893dcad7ba1c26ae71f124)]
 package: name='tv.twitch.android.app' versionCode='1308000' versionName='13.8.0' platformBuildVersionName='13' platformBuildVersionCode='33' compileSdkVersion='33' compileSdkVersionCodename='13'

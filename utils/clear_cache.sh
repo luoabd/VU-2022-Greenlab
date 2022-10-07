@@ -11,6 +11,9 @@ fi
 
 adb shell am force-stop com.android.settings
 adb shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS package:$package >/dev/null
-./tap_text.sh "Storage[^>]*cache"
-./tap_text.sh "CLEAR CACHE" # "Clear cache"
+sleep 1
+# ./tap_text.sh "Storage[^>]*cache"
+adb shell input tap 800 1300
+# ./tap_text.sh "CLEAR CACHE" # "Clear cache"
+adb shell input tap 800 750
 

@@ -3,12 +3,21 @@
   "devices": {
     "nokia_6_2": {}
   },
-  "repetitions": 1,
+  "repetitions": 15,
   "duration": 360000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
   "apps": [
-    "com.google.android.youtube"
+    "com.coupang.mobile",
+    "com.espn.score.center",
+    "com.google.android.youtube",
+    "com.linkedin.android",
+    "com.pinterest",
+    "com.shopee.tw",
+    "com.soundcloud.android",
+    "com.spotify.music",
+    "com.weather.Weather",
+    "tv.twitch.android.app"
   ],
   "profilers": {
     "android": {
@@ -25,13 +34,12 @@
       "experiment_aggregation": "default",
       "enable_systrace_parsing": true,
       "python2_path": "/usr/bin/python2"
-      
     },
     "frametimes2": {
-      "subject_aggregation" : "default",
+      "subject_aggregation": "default",
       "sample_interval": 100
     },
-    "network": { }
+    "network": {}
   },
   "scripts": {
     "before_experiment": "Scripts/before_experiment.py",
