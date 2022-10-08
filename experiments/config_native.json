@@ -4,7 +4,7 @@
     "nokia_6_2": {}
   },
   "repetitions": 25,
-  "duration": 130000,
+  "duration": 180000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
   "apps": [
