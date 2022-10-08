@@ -1,4 +1,4 @@
-**Note!** This plugin is a fork of [frametimes](https://github.com/S2-group/android-runner/tree/master/AndroidRunner/Plugins/frametimes) which also supports web experiments. **(!)** The browser is hardcoded to `org.mozilla.firefox`.
+**Note!** This plugin is a fork of [frametimes](https://github.com/S2-group/android-runner/tree/master/AndroidRunner/Plugins/frametimes) which also supports web experiments. **(!)** The browser is hardcoded to `com.android.chrome`.
 
 # Frametimes Plugin
 The frame times plugin gathers unique frame rendering durations (in nanoseconds) by utilizing `dumpsys gfxinfo framestats` and counts the amount of delayed frames that occurred following the 16ms threshold [defined by Google](https://developer.android.com/training/testing/performance).

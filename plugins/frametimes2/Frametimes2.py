@@ -7,7 +7,7 @@ import csv
 
 from AndroidRunner.Plugins.Profiler import Profiler
 
-BROWSER_PACKAGE = 'org.mozilla.firefox'
+BROWSER_PACKAGE = 'com.android.chrome'
 
 class ConfigError(Exception):
     pass
