@@ -26,7 +26,7 @@ function interact()  {
     if [ "$1" == "first" ]
     then
         # ...then click on the close button (or open another post below the post)
-        adb shell input tap 90 1550
+        adb shell input tap 90 1700
     fi
     sleep 1
     adb shell input swipe 500 800 500 200

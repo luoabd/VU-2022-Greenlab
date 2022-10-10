@@ -11,8 +11,8 @@ sleep 3
 # Start song on landing page OR accept cookie pop-up
 adb shell input tap 250 1800
 # Maximize player OR start song on landing page if cookie pop-up did appear
-adb shell input tap 250 1800
+# adb shell input tap 250 1800
 sleep 2
 # Maximize player if cookie pop-up did appear
-adb shell input tap 290 1850
+adb shell input tap 290 2100
 

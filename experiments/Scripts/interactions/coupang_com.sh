@@ -11,10 +11,10 @@ iter=1
 
 # Wait for native app ad pop-up to appear and close it
 sleep 3
-adb shell input tap 600 1300
+adb shell input tap 550 1450
 
 # Open category
-adb shell input tap 950 950
+adb shell input tap 950 1100
 sleep 1
 
 while true
@@ -27,11 +27,11 @@ do
     adb shell input tap 600 1300
 
     # Scroll right (product images)
-    adb shell input swipe 490 450 250 450
+    adb shell input swipe 490 750 250 750
     sleep 2
-    adb shell input swipe 490 450 250 450
+    adb shell input swipe 490 750 250 750
     sleep 2
-    adb shell input swipe 490 450 250 450
+    adb shell input swipe 490 750 250 750
     sleep 2
 
     # Scroll down check comments)

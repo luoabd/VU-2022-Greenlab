@@ -11,9 +11,9 @@ START=$(date +%s)
 # Wait for any ad pop-up to appear
 sleep 3
 # Close ad pop-up
-adb shell input tap 20 150
+adb shell input tap 970 740
 # Open category
-adb shell input tap 830 650
+adb shell input tap 830 800
 sleep 1
 
 while true

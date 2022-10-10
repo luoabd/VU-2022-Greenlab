@@ -17,11 +17,11 @@ sleep 1
 # adb shell input tap 50 150
 
 # Open search
-adb shell input tap 900 250
+adb shell input tap 900 300
 # Look up 10h video (very nice music)
 adb shell input text "UcRtFYAz2Yo"
 adb shell input keyevent 66
 sleep 1
 
 # Open video
-adb shell input tap 200 550
+adb shell input tap 200 600

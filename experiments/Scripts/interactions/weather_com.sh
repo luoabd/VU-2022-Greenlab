@@ -8,17 +8,12 @@ test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! 
 
 START=$(date +%s)
 
-# Close cookie notice
-sleep 2
-adb shell input tap 700 1850
-sleep 2
-
 # Loop for 360 seconds (6 minutes)
 while true
 do
     # Main interaction loop (takes roughly 27 seconds)
     # hourly forecast
-    adb shell input tap 300 2050
+    adb shell input tap 300 2200
     sleep 1
     adb shell input swipe 500 2000 500 500
     sleep 1
@@ -35,3 +30,9 @@ do
     adb shell input tap 750 2200
     sleep 10
 done
+
+exit
+# Close cookie notice
+sleep 2
+adb shell input tap 700 1850
+sleep 2

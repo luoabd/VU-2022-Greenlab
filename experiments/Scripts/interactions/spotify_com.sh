@@ -7,8 +7,8 @@
 test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! Expected 1080x2340 device."
 
 # Open search
-adb shell input tap 400 2050
-adb shell input tap 400 400
+adb shell input tap 400 2200
+adb shell input tap 400 550
 sleep 1
 # Look up long playlist
 adb shell input text "beatport\ top\ 100\ house"
@@ -16,11 +16,11 @@ adb shell input keyevent 66
 sleep 1
 
 # Open playlist
-adb shell input tap 200 500
+adb shell input tap 200 600
 sleep 1
 
 # Play shuffle
-adb shell input tap 1000 1150
+adb shell input tap 1000 1300
 
 exit
 

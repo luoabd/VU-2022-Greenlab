@@ -7,7 +7,7 @@
 test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! Expected 1080x2340 device."
 
 distance=60 # Distance between headlines
-loc=990
+loc=1340
 
 while true
 do
@@ -15,8 +15,8 @@ do
     do
         # Main interaction loop
         # Scroll down (to top headlines)        
-        adb shell input swipe 500 450 500 0
-        adb shell input swipe 500 450 500 0
+        adb shell input swipe 500 550 500 0
+        adb shell input swipe 500 550 500 0
         sleep 1
 
         # Open article
