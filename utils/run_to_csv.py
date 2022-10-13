@@ -4,13 +4,14 @@ import sys
 from pathlib import Path
 import json
 
-if len(sys.argv) != 2:
-    print(f"Usage: {sys.argv[0]} <run dir>")
+if len(sys.argv) != 2 and not (len(sys.argv) == 3 and sys.argv[2] == '--no-header'):
+    print(f"Usage: {sys.argv[0]} <run dir> [--no-header]", file=sys.stderr)
     sys.exit(1)
 
 subjects = ['coupang', 'espn', 'linkedin', 'pinterest', 'shopee', 'soundcloud', 'spotify', 'twitch', 'weather', 'youtube'
             ]
-print("subject,path,app_type,repetition,energy_consumption,network_traffic,mean_cpu_load,mean_mem_usage,mean_frame_time")
+if len(sys.argv) < 3:
+    print("subject,path,app_type,repetition,energy_consumption,network_traffic,mean_cpu_load,mean_mem_usage,mean_frame_time")
 profilers = ['batterystats', 'network', 'android', 'frametimes2']
 
 repetitions = json.loads(Path(sys.argv[1]).joinpath(
