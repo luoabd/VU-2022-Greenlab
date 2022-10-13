@@ -32,7 +32,7 @@
     "batterystats": {
       "subject_aggregation": "default",
       "experiment_aggregation": "default",
-      "enable_systrace_parsing": true,
+      "enable_systrace_parsing": false,
       "python2_path": "/usr/bin/python2"
     },
     "frametimes2": {

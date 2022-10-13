@@ -18,3 +18,4 @@ adb shell input tap 700 650
 adb shell input tap 700 1550
 adb shell input tap 700 350
 adb shell input tap 950 2200
+adb shell input tap 900 1550

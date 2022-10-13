@@ -9,10 +9,10 @@ test "$(adb shell wm size | grep -oP "\d.*$")" == "1080x2340" || echo "Warning! 
 # Wait for any cookie pop-up to appear
 sleep 3
 # Accept cookies
-adb shell input tap 750 1585
+# adb shell input tap 750 1585
 
 # Go back just in case we did just open a video (no cookie pop-up)
-adb shell input tap 50 300
+# adb shell input tap 50 300
 
 # Open search
 adb shell input tap 900 300
@@ -22,4 +22,4 @@ adb shell input text "CritterVision"
 adb shell input keyevent 66
 
 # Open video
-adb shell input tap 200 650
+adb shell input tap 200 700
