@@ -14,10 +14,10 @@
     "https://coupang.com",
     "https://espn.com",
     "https://linkedin.com",
-    "https://pinterest.com",
+    "https://nl.pinterest.com",
     "https://shopee.tw",
     "https://soundcloud.com",
-    "https://spotify.com",
+    "https://open.spotify.com",
     "https://twitch.tv",
     "https://weather.com",
     "https://youtube.com"
@@ -35,7 +35,7 @@
     "batterystats": {
       "subject_aggregation": "default",
       "experiment_aggregation": "default",
-      "enable_systrace_parsing": true,
+      "enable_systrace_parsing": false,
       "python2_path": "/usr/bin/python2"
       
     },
