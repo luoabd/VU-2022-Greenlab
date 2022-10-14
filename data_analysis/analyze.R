@@ -59,7 +59,7 @@ fmt_sub = c(
 )
 # For plotting
 df$Subject <- as.factor(fmt_sub[as.character(df$subject)])
-SubjectShapes <- 16 + c(0, 0, 0, 2, 2, 0, 2, 2, 0, 2) # By category for sorted Subject
+SubjectShapes <- 15 + c(0, 0, 0, 1, 1, 0, 1, 1, 0, 1) # By category for sorted Subject
 # SubjectColors <- c(4, 2, 3, 3, 4, 5, 5, 2, 6, 6) # By category for sorted Subject
 SubjectColors <- c(
     "#e6194B", "#3cb44b", "#4363d8", "#4363d8", 
@@ -72,7 +72,7 @@ cat("For all tests: alpha =", alpha, "\n\n")
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
         # geom_violin(trim = T) +
-        geom_jitter(aes(color = Subject, shape = Subject), width = 0.3, height = 0, size = 2) +
+        geom_jitter(aes(color = Subject, shape = Subject), width = 0.35, height = 0, size = 2) +
         geom_boxplot(alpha = 0) +
         labs(x = "APP TYPE", y = var_title) +
         scale_shape_manual(values = SubjectShapes) +
