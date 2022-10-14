@@ -13,8 +13,6 @@ library(bestNormalize)
 unlink("plots/*", recursive = TRUE)
 dir.create("plots", showWarnings = FALSE)
 
-alpha <- 0.05
-
 # Load raw dataset
 df <- read.csv("experiment_results.csv")
 # Prepare dataset
@@ -22,9 +20,6 @@ cols_factors <- c("subject", "path", "app_type", "repetition")
 df[cols_factors] <- lapply(df[cols_factors], as.factor)
 cols_numeric <- names(df %>% select_if(negate(is.factor)))
 df[cols_numeric] <- lapply(df[cols_numeric], as.numeric)
-
-
-df <- df %>% select(-mean_frame_time) # TODO only for testing
 
 nan_rows_count <- df %>% filter(any(is.na(.))) %>% nrow()
 df <- df %>% filter_all(all_vars(!is.na(.)))
@@ -38,7 +33,7 @@ fmt_var = c(
   "energy_consumption" = "Energy consumption (J)",
   "network_traffic" = "Network traffic (B)",
   "mean_cpu_load" = "Mean CPU load (%)",
-  "mean_memory_load" = "Mean memory load (kB)",
+  "mean_mem_usage" = "Mean memory usage (kB)",
   "mean_frame_time" = "Mean frame time (ns)"
 )
 
@@ -59,6 +54,9 @@ fmt_sub = c(
 df$Subject <- as.factor(fmt_sub[as.character(df$subject)])
 SubjectColors <- c(4, 2, 3, 3, 4, 5, 5, 2, 6, 6) # By category for sorted Subject
 SubjectShapes <- 16 + c(0, 0, 0, 2, 2, 0, 2, 2, 0, 2) # By category for sorted Subject
+
+alpha <- 0.05
+cat("For all tests: alpha =", alpha, "\n\n")
 
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
@@ -93,7 +91,7 @@ test_parametric <- function(df_var_native, df_var_web, var) {
     cat("Paired t-test: t = ", t_test$statistic, ", p-value = ", t_test$p.value, "\n")
     cat("Means are ", ifelse(t_test$p.value < alpha, "", "not "), "different\n", sep = "")
     # Use Cohen's d to interpret effect size
-    d <- cohen.d(df_var_native[[var]], df_var_web[[var]])$estimate
+    d <- cohen.d(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha)$estimate
     # small (d = 0.2), medium (d = 0.5), and large (d = 0.8) according to https://doi.org/10.4324/9780203771587
     effect <- ifelse(d < 0.2, "negligible", ifelse(d < 0.5, "small", ifelse(d < 0.8, "medium", "large")))
     cat("Effect size using Cohen's d: estimate = ", d, " (", effect, ")\n", sep = "")
@@ -105,9 +103,9 @@ test_non_parametric <- function(df_var_native, df_var_web, var) {
     cat("Wilcoxon signed-rank test: W = ", wilcox_test$statistic, ", p-value = ", wilcox_test$p.value, "\n")
     cat("Means are ", ifelse(wilcox_test$p.value < alpha, "", "not "), "different\n", sep = "")
     # Use Cliff's delta to interpret effect size
-    d <- cliff.delta(df_var_native[[var]], df_var_web[[var]])$estimate
+    d <- cliff.delta(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha)$estimate
     # small (d = 0.147), medium (d = 0.33), and large (d = 0.474) according to https://www.bibsonomy.org/bibtex/216a5c27e770147e5796719fc6b68547d/kweiand
-    effect <- ifelse(d < 0.147, "negligible", ifelse(d < 0.33, "small", ifelse(d < 0.474, "medium", "large")))
+    effect <- ifelse(abs(d) < 0.147, "negligible", ifelse(abs(d) < 0.33, "small", ifelse(abs(d) < 0.474, "medium", "large")))
     cat("Effect size using Cliff's delta: estimate = ", d, " (", effect, ")\n", sep = "")
 }
 
@@ -131,13 +129,12 @@ for (var in cols_numeric) {
     plot_qq(df_var_web, var, paste0("plots/qq_web_", var, ".pdf"))
 
     cat("4. Check for normality\n")
-    df_var_native <- data.frame(lapply(df_var_web[names(df_var_web %>% select_if(is.numeric))], jitter)) # TODO only for testing
     norm_native <- shapiro.test(df_var_native[[var]])
     is_normal_native <- norm_native$p.value > alpha
     norm_web <- shapiro.test(df_var_web[[var]])
     is_normal_web <- norm_web$p.value > alpha
     
-    cat(var, " web is ", ifelse(is_normal_web, "", "not "), "normal using Shapiro-Wilk (p-value: ", norm_web$p.value, ", alpha: ", alpha, ")\n", sep = "")
+    cat(var, " web is ", ifelse(is_normal_web, "", "not "), "normal using Shapiro-Wilk (p-value: ", norm_web$p.value, ")\n", sep = "")
     if (!is_normal_web) {
         # cat("Web data is not normal, using bestNormalize() to normalize\n")
         # BN_obj <- bestNormalize(df_var_web[[var]])
@@ -146,6 +143,19 @@ for (var in cols_numeric) {
     }
 
     cat("5. Compare means of native and web\n")
+
+    # Drop value from longer (native or ) to make them equal length
+    n_dropped <- abs(nrow(df_var_native) - nrow(df_var_web))
+    if (nrow(df_var_native) > nrow(df_var_web)) {
+        df_var_native <- df_var_native %>% slice(1:(nrow(df_var_native) - n_dropped))
+    } else if (nrow(df_var_web) > nrow(df_var_native)) {
+        df_var_web <- df_var_web %>% slice(1:(nrow(df_var_web) - n_dropped))
+    }
+    if (n_dropped > 0) {
+        cat("Dropped ", n_dropped, " values from longer dataset to make them equal length\n", sep = "")
+    }
+
+
     if (is_normal_native && is_normal_web) {
         test_parametric(df_var_native, df_var_web, var)
     }
@@ -153,7 +163,5 @@ for (var in cols_numeric) {
         test_non_parametric(df_var_native, df_var_web, var)
     }
     cat("\n")
-    
-    break # TODO only for testing
 }
 warnings()
