@@ -60,9 +60,9 @@ cat("For all tests: alpha =", alpha, "\n\n")
 
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
-        geom_boxplot() +
-        geom_violin(trim = T, alpha = 0.5) +
+        # geom_violin(trim = T) +
         geom_jitter(aes(color = Subject, shape = Subject), width = 0.3, height = 0, size = 2) +
+        geom_boxplot(alpha = 0) +
         labs(x = "APP TYPE", y = var_title) +
         scale_shape_manual(values = SubjectShapes) +
         scale_color_manual(values = SubjectColors)
