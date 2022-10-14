@@ -14,4 +14,4 @@ adb shell input text "CritterVision"
 adb shell input keyevent 66
 
 # Open video
-adb shell input tap 200 450
+adb shell input tap 200 600
