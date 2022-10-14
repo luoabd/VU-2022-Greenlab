@@ -9,7 +9,14 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(qqplotr))
 library(effsize)
 library(bestNormalize)
+library(showtext)
 
+textTheme <- theme()
+tryCatch({
+    font.add("CMU", "/usr/share/fonts/cm-unicode/cmunrm.otf")
+    showtext.auto()
+    textTheme <- theme(text=element_text(family="CMU"))
+})
 unlink("plots/*", recursive = TRUE)
 dir.create("plots", showWarnings = FALSE)
 
@@ -52,8 +59,12 @@ fmt_sub = c(
 )
 # For plotting
 df$Subject <- as.factor(fmt_sub[as.character(df$subject)])
-SubjectColors <- c(4, 2, 3, 3, 4, 5, 5, 2, 6, 6) # By category for sorted Subject
 SubjectShapes <- 16 + c(0, 0, 0, 2, 2, 0, 2, 2, 0, 2) # By category for sorted Subject
+# SubjectColors <- c(4, 2, 3, 3, 4, 5, 5, 2, 6, 6) # By category for sorted Subject
+SubjectColors <- c(
+    "#e6194B", "#3cb44b", "#4363d8", "#4363d8", 
+    "#e6194B", "#f58231", "#f58231", "#3cb44b", 
+    "#42d4f4", "#42d4f4") # By category for sorted Subject
 
 alpha <- 0.05
 cat("For all tests: alpha =", alpha, "\n\n")
@@ -65,14 +76,18 @@ plot_data <- function(df, var, var_title) {
         geom_boxplot(alpha = 0) +
         labs(x = "APP TYPE", y = var_title) +
         scale_shape_manual(values = SubjectShapes) +
-        scale_color_manual(values = SubjectColors)
+        scale_color_manual(values = SubjectColors) +
+        theme(text = element_text(size = 21)) + textTheme +
+        theme(legend.position = "none")
     suppressMessages(ggsave(filename=paste0("plots/boxplot_", var, ".pdf")))
 }
 
 plot_density <- function(df, var, var_title) {
     ggplot(df_var, aes(x = .data[[var]], fill = app_type)) +
         geom_density(alpha = 0.5) +
-        labs(x = var_title, y = "Density", fill = "APP TYPE")
+        labs(x = var_title, y = "Density", fill = "APP TYPE") + 
+        theme(text = element_text(size = 21)) + textTheme +
+        theme(legend.position = c(0.8, 0.85))
     suppressMessages(ggsave(filename=paste0("plots/density_", var, ".pdf")))
 }
 
@@ -81,7 +96,11 @@ plot_qq <- function(df, var, filename) {
         stat_qq_band() +
         stat_qq_line() +
         stat_qq_point() +
-        labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+        # theme(text = element_text(size = 24)) + textTheme +
+        # labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+        # No axis ticks
+        theme(axis.ticks.x = element_blank(), axis.ticks.y = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank()) + 
+        labs(x=element_blank(), y=element_blank())
     suppressMessages(ggsave(filename=filename))
 }
 
