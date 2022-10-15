@@ -11,7 +11,7 @@ if len(sys.argv) != 2 and not (len(sys.argv) == 3 and sys.argv[2] == '--no-heade
 subjects = ['coupang', 'espn', 'linkedin', 'pinterest', 'shopee', 'soundcloud', 'spotify', 'twitch', 'weather', 'youtube'
             ]
 if len(sys.argv) < 3:
-    print("subject,path,app_type,repetition,energy_consumption,network_traffic,mean_cpu_load,mean_mem_usage,mean_frame_time")
+    print("subject,path,app_type,repetition,energy_consumption,network_traffic,mean_cpu_load,mean_mem_usage,median_frame_time")
 profilers = ['batterystats', 'network', 'android', 'frametimes2']
 
 repetitions = json.loads(Path(sys.argv[1]).joinpath(
@@ -55,7 +55,9 @@ def get_value_frametimes2(profiler_result_dir, repetition):
         f.readline()
         for line in f:
             frame_times.append(float(line.split(',')[2]))
-    print(f"{sum(frame_times)/len(frame_times)}", end='')
+    # print(f"{sum(frame_times)/len(frame_times)}", end='')
+    median = sorted(frame_times)[len(frame_times)//2]
+    print(f"{median}", end='')
 
 
 def get_value(profiler_result_dir, repetition):

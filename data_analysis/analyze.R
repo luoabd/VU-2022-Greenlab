@@ -41,7 +41,7 @@ fmt_var = c(
   "network_traffic" = "Network traffic (B)",
   "mean_cpu_load" = "Mean CPU load (%)",
   "mean_mem_usage" = "Mean memory usage (kB)",
-  "mean_frame_time" = "Mean frame time (ns)"
+  "median_frame_time" = "Median frame time (ns)"
 )
 
 # Subject value to plot legend mapping
