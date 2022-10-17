@@ -43,18 +43,33 @@ df <- nonas_df
 cat("Removed", sum(na_rows_count), "rows with NAs\n")
 
 # Dataset summary
-# TODO summary should output latex table
 # summary(df)
+cat("Summary for LaTeX report: (native and web in same row)\n")
 df_native <- df %>% filter(app_type == "native") %>% select_if(is.numeric)
 df_web <- df %>% filter(app_type == "web") %>% select_if(is.numeric)
-cat("Summary native:\n")
-summary(df_native)
-cat("Stdev native:\n")
-sapply(df_native, sd)
-cat("Summary web:\n")
-summary(df_web)
-cat("Stdev web:\n")
-sapply(df_web, sd)
+
+print_latex_tab_row <- function(name, func) {
+    cat("\\textbf{", name, "} & ", sep = "")
+    values <- apply(df_native, 2, func)
+    for (i in 1:length(values)) {
+        cat(values[i], if (i == length(values)) "" else "& ")
+    }
+    cat("& ")
+    values <- apply(df_web, 2, func)
+    for (i in 1:length(values)) {
+        cat(values[i], if (i == length(values)) "" else "& ")
+    }
+    cat("\\\\\n")
+}
+print_latex_tab_row("Mean", mean)
+print_latex_tab_row("Standard deviation", sd)
+print_latex_tab_row("Minimum", min)
+print_latex_tab_row("25\\% quantile", function(x) quantile(x, 0.25))
+print_latex_tab_row("Median", median)
+print_latex_tab_row("75\\% quantile", function(x) quantile(x, 0.75))
+print_latex_tab_row("Maximum", max)
+
+
 
 # Dependent variable column name to plot axis title mapping
 fmt_var = c(
@@ -90,12 +105,14 @@ SubjectColors <- c(
 alpha <- 0.05
 cat("\nFor all tests: alpha =", alpha, "\n\n")
 
+df_normality_test_results <- data.frame()
+
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
         # geom_violin(trim = T) +
         geom_jitter(aes(color = Subject, shape = Subject), width = 0.35, height = 0, size = 2) +
         geom_boxplot(alpha = 0) +
-        stat_summary(funy=mean, geom="point", shape=5, size=5, color="black") +
+        stat_summary(fun=mean, geom="point", shape=5, size=5, color="black") +
         labs(x = "APP TYPE", y = var_title) +
         scale_shape_manual(values = SubjectShapes) +
         scale_color_manual(values = SubjectColors) +
@@ -176,6 +193,10 @@ for (var in cols_numeric) {
     is_normal_native <- norm_native$p.value > alpha
     norm_web <- shapiro.test(df_var_web[[var]])
     is_normal_web <- norm_web$p.value > alpha
+    df_normality_test_results <- rbind(
+        df_normality_test_results,
+        data.frame(var = var, app_type = "native", p_value = norm_native$p.value, is_normal = is_normal_native),
+        data.frame(var = var, app_type = "web", p_value = norm_web$p.value, is_normal = is_normal_web))
     
     cat(var, " web is ", ifelse(is_normal_web, "", "not "), "normal using Shapiro-Wilk (p-value: ", norm_web$p.value, ")\n", sep = "")
     if (!is_normal_web) {
@@ -207,4 +228,28 @@ for (var in cols_numeric) {
     }
     cat("\n")
 }
+
+fmt_float_sci_latex <- function(x, mantissa_digits = 3) {
+    factor <- 10^floor(log10(abs(x)))
+    exponent <- floor(log10(factor))
+    mantissa <- x / factor
+    mantissa <- round(mantissa, mantissa_digits)
+    return (paste0("$", mantissa, "\\times 10^{", exponent, "}$"))
+}
+
+cat("\nNormality test results for LaTeX report:\n")
+for (i in 1:nrow(df_normality_test_results)) {
+    var <- df_normality_test_results[i, "var"]
+    fmtd_var <- gsub("%", "\\\\%", fmt_var[var])
+    fmtd_var <- strsplit(fmtd_var, "\\(")[[1]][1]
+    if (i %% 2 == 1) {
+        cat("\\multirow{2}{*}{", fmtd_var, "}", sep = "")
+    }
+    fmtd_app_type <- df_normality_test_results[i, "app_type"]
+    p_value <- fmt_float_sci_latex(df_normality_test_results[i, "p_value"]) 
+    fmtd_is_normal <- ifelse(df_normality_test_results[i, "is_normal"], "yes", "no") 
+    cat(" & ", fmtd_app_type, " & ", p_value, " & ", fmtd_is_normal, " \\\\\n", sep = "")
+}
+cat("\n")
+
 warnings()
