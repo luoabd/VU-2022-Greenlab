@@ -1,18 +1,14 @@
 {
-  "type": "web",
+  "type": "native",
   "devices": {
     "nokia_6_2": {}
   },
-  "repetitions": 1,
-  "duration": 5000,
+  "repetitions": 25,
+  "duration": 180000,
   "systrace_path": "/var/ar-utils/systrace/systrace.py",
   "powerprofile_path": "/var/ar-utils/power_profiles/nokia_6_2.xml",
-  "browsers": [
-    "chrome"
-  ],
-  "paths": [
-    "https://youtube.com",
-    "https://twitch.tv"
+  "apps": [
+    "com.espn.score_center"
   ],
   "profilers": {
     "android": {
@@ -27,7 +23,7 @@
     "batterystats": {
       "subject_aggregation": "default",
       "experiment_aggregation": "default",
-      "enable_systrace_parsing": true,
+      "enable_systrace_parsing": false,
       "python2_path": "/usr/bin/python2"
     },
     "frametimes2": {
@@ -50,5 +46,5 @@
     "after_run": "Scripts/after_run.py",
     "after_experiment": "Scripts/after_experiment.py"
   },
-  "time_between_run": 0
+  "time_between_run": 30000
 }
