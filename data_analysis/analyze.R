@@ -243,6 +243,9 @@ for (i in 1:nrow(df_normality_test_results)) {
     fmtd_var <- gsub("%", "\\\\%", fmt_var[var])
     fmtd_var <- strsplit(fmtd_var, "\\(")[[1]][1]
     if (i %% 2 == 1) {
+        if (i > 1) {
+            cat("\\hdashline\n")
+        }
         cat("\\multirow{2}{*}{", fmtd_var, "}", sep = "")
     }
     fmtd_app_type <- df_normality_test_results[i, "app_type"]
