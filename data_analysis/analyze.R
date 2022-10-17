@@ -78,7 +78,8 @@ plot_data <- function(df, var, var_title) {
         scale_shape_manual(values = SubjectShapes) +
         scale_color_manual(values = SubjectColors) +
         theme(text = element_text(size = 21)) + textTheme +
-        theme(legend.position = "none")
+        theme(legend.position = "none") +
+        (if (var == "network_traffic") scale_y_log10() else scale_y_continuous())
     suppressMessages(ggsave(filename=paste0("plots/boxplot_", var, ".pdf")))
 }
 
@@ -87,7 +88,8 @@ plot_density <- function(df, var, var_title) {
         geom_density(alpha = 0.5) +
         labs(x = var_title, y = "Density", fill = "APP TYPE") + 
         theme(text = element_text(size = 21)) + textTheme +
-        theme(legend.position = c(0.8, 0.85))
+        theme(legend.position = c(0.8, 0.85)) +
+        (if (var == "network_traffic") scale_x_log10() else scale_x_continuous())
     suppressMessages(ggsave(filename=paste0("plots/density_", var, ".pdf")))
 }
 
