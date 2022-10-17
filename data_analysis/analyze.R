@@ -43,7 +43,7 @@ df <- nonas_df
 cat("Removed", sum(na_rows_count), "rows with NAs\n")
 
 # Dataset summary
-options(scipen = 999) # Output using non-scientific notation
+# TODO summary should output latex table
 # summary(df)
 df_native <- df %>% filter(app_type == "native") %>% select_if(is.numeric)
 df_web <- df %>% filter(app_type == "web") %>% select_if(is.numeric)
@@ -95,6 +95,7 @@ plot_data <- function(df, var, var_title) {
         # geom_violin(trim = T) +
         geom_jitter(aes(color = Subject, shape = Subject), width = 0.35, height = 0, size = 2) +
         geom_boxplot(alpha = 0) +
+        stat_summary(funy=mean, geom="point", shape=5, size=5, color="black") +
         labs(x = "APP TYPE", y = var_title) +
         scale_shape_manual(values = SubjectShapes) +
         scale_color_manual(values = SubjectColors) +
