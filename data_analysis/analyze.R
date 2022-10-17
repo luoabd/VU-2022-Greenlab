@@ -9,12 +9,12 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(qqplotr))
 library(effsize)
 library(bestNormalize)
-library(showtext)
+suppressPackageStartupMessages(library(showtext))
 
 textTheme <- theme()
 tryCatch({
-    font.add("CMU", "/usr/share/fonts/cm-unicode/cmunrm.otf")
-    showtext.auto()
+    font_add("CMU", "/usr/share/fonts/cm-unicode/cmunrm.otf")
+    showtext_auto()
     textTheme <- theme(text=element_text(family="CMU"))
 })
 unlink("plots/*", recursive = TRUE)
@@ -26,14 +26,35 @@ df <- read.csv("experiment_results.csv")
 cols_factors <- c("subject", "path", "app_type", "repetition")
 df[cols_factors] <- lapply(df[cols_factors], as.factor)
 cols_numeric <- names(df %>% select_if(negate(is.factor)))
-df[cols_numeric] <- lapply(df[cols_numeric], as.numeric)
+suppressWarnings(df[cols_numeric] <- lapply(df[cols_numeric], as.numeric)) # Suppress warnings about NAs
 
-nan_rows_count <- df %>% filter(any(is.na(.))) %>% nrow()
-df <- df %>% filter_all(all_vars(!is.na(.)))
-cat("Removed", sum(nan_rows_count), "rows with NAs\n")
+na_rows_count = 0
+nonas_df <- data.frame()
+for (row in 1:nrow(df)) {
+    row <- df[row, ]
+    if (any(is.na(row))) {
+        na_rows_count = na_rows_count + 1
+    }
+    else {
+        nonas_df <- rbind(nonas_df, row)
+    }
+}
+df <- nonas_df
+cat("Removed", sum(na_rows_count), "rows with NAs\n")
 
 # Dataset summary
-summary(df)
+options(scipen = 999) # Output using non-scientific notation
+# summary(df)
+df_native <- df %>% filter(app_type == "native") %>% select_if(is.numeric)
+df_web <- df %>% filter(app_type == "web") %>% select_if(is.numeric)
+cat("Summary native:\n")
+summary(df_native)
+cat("Stdev native:\n")
+sapply(df_native, sd)
+cat("Summary web:\n")
+summary(df_web)
+cat("Stdev web:\n")
+sapply(df_web, sd)
 
 # Dependent variable column name to plot axis title mapping
 fmt_var = c(
@@ -67,7 +88,7 @@ SubjectColors <- c(
     "#42d4f4", "#42d4f4") # By category for sorted Subject
 
 alpha <- 0.05
-cat("For all tests: alpha =", alpha, "\n\n")
+cat("\nFor all tests: alpha =", alpha, "\n\n")
 
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
