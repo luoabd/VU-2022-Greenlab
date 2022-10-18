@@ -105,8 +105,6 @@ SubjectColors <- c(
 alpha <- 0.05
 cat("\nFor all tests: alpha =", alpha, "\n\n")
 
-df_normality_test_results <- data.frame()
-
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
         # geom_violin(trim = T) +
@@ -157,6 +155,8 @@ test_parametric <- function(df_var_native, df_var_web, var) {
     cat("Effect size using Cohen's d: estimate = ", d, " (", effect, ")\n", sep = "")
 }
 
+df_non_parametric_results <- data.frame()
+
 test_non_parametric <- function(df_var_native, df_var_web, var) {
     # Perform Wilcoxon signed-rank test
     wilcox_test <- wilcox.test(df_var_native[[var]], df_var_web[[var]], paired = T)
@@ -167,7 +167,12 @@ test_non_parametric <- function(df_var_native, df_var_web, var) {
     # small (d = 0.147), medium (d = 0.33), and large (d = 0.474) according to https://www.bibsonomy.org/bibtex/216a5c27e770147e5796719fc6b68547d/kweiand
     effect <- ifelse(abs(d) < 0.147, "negligible", ifelse(abs(d) < 0.33, "small", ifelse(abs(d) < 0.474, "medium", "large")))
     cat("Effect size using Cliff's delta: estimate = ", d, " (", effect, ")\n", sep = "")
+    df_non_parametric_results <<- rbind(
+        df_non_parametric_results,
+        data.frame(var = var, W = wilcox_test$statistic, p_value = wilcox_test$p.value, effect_size=d, interpretation=effect))
 }
+
+df_normality_test_results <- data.frame()
 
 # Data analysis per dependent variable
 for (var in cols_numeric) {
@@ -252,6 +257,24 @@ for (i in 1:nrow(df_normality_test_results)) {
     p_value <- fmt_float_sci_latex(df_normality_test_results[i, "p_value"]) 
     fmtd_is_normal <- ifelse(df_normality_test_results[i, "is_normal"], "yes", "no") 
     cat(" & ", fmtd_app_type, " & ", p_value, " & ", fmtd_is_normal, " \\\\\n", sep = "")
+}
+cat("\n")
+
+cat("\nNon-parametric test results for LaTeX report:\n")
+short_varnames = c("e", "n", "c", "m", "f")
+for (i in 1:nrow(df_non_parametric_results)) {
+    var <- short_varnames[i]
+    if (i == 2) {
+        if (i > 1) {
+            cat("\\hdashline\n")
+        }
+    }
+    W <- df_non_parametric_results[i, "W"]
+    p_value <- fmt_float_sci_latex(df_non_parametric_results[i, "p_value"])
+    effect_size <- df_non_parametric_results[i, "effect_size"] 
+    effect_size_interpretation <- df_non_parametric_results[i, "interpretation"]
+    rq <- ifelse(i == 1, "RQ1", "RQ2")
+    cat("$", var, "$ & ", p_value, " & ", effect_size, " & ", effect_size_interpretation, " & ", rq, " \\\\\n", sep = "")
 }
 cat("\n")
 
