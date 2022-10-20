@@ -103,7 +103,7 @@ SubjectColors <- c(
     "#42d4f4", "#42d4f4") # By category for sorted Subject
 
 alpha <- 0.05
-cat("\nFor all tests: alpha =", alpha, "\n\n")
+cat("\nFor all tests: alpha =", alpha, " (alpha/2 for two-sided tests)\n\n")
 
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
@@ -147,9 +147,9 @@ test_parametric <- function(df_var_native, df_var_web, var) {
     # Perform paired t-test
     t_test <- t.test(df_var_native[[var]], df_var_web[[var]], paired = T)
     cat("Paired t-test: t = ", t_test$statistic, ", p-value = ", t_test$p.value, "\n")
-    cat("Means are ", ifelse(t_test$p.value < alpha, "", "not "), "different\n", sep = "")
+    cat("Means are ", ifelse(t_test$p.value < alpha/2, "", "not "), "different\n", sep = "")
     # Use Cohen's d to interpret effect size
-    d <- cohen.d(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha)$estimate
+    d <- cohen.d(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha/2)$estimate
     # small (d = 0.2), medium (d = 0.5), and large (d = 0.8) according to https://doi.org/10.4324/9780203771587
     effect <- ifelse(d < 0.2, "negligible", ifelse(d < 0.5, "small", ifelse(d < 0.8, "medium", "large")))
     cat("Effect size using Cohen's d: estimate = ", d, " (", effect, ")\n", sep = "")
@@ -161,9 +161,9 @@ test_non_parametric <- function(df_var_native, df_var_web, var) {
     # Perform Wilcoxon signed-rank test
     wilcox_test <- wilcox.test(df_var_native[[var]], df_var_web[[var]], paired = T)
     cat("Wilcoxon signed-rank test: W = ", wilcox_test$statistic, ", p-value = ", wilcox_test$p.value, "\n")
-    cat("Means are ", ifelse(wilcox_test$p.value < alpha, "", "not "), "different\n", sep = "")
+    cat("Means are ", ifelse(wilcox_test$p.value < alpha/2, "", "not "), "different\n", sep = "")
     # Use Cliff's delta to interpret effect size
-    d <- cliff.delta(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha)$estimate
+    d <- cliff.delta(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha/2)$estimate
     # small (d = 0.147), medium (d = 0.33), and large (d = 0.474) according to https://www.bibsonomy.org/bibtex/216a5c27e770147e5796719fc6b68547d/kweiand
     effect <- ifelse(abs(d) < 0.147, "negligible", ifelse(abs(d) < 0.33, "small", ifelse(abs(d) < 0.474, "medium", "large")))
     cat("Effect size using Cliff's delta: estimate = ", d, " (", effect, ")\n", sep = "")
@@ -274,7 +274,12 @@ for (i in 1:nrow(df_non_parametric_results)) {
     effect_size <- df_non_parametric_results[i, "effect_size"] 
     effect_size_interpretation <- df_non_parametric_results[i, "interpretation"]
     rq <- ifelse(i == 1, "RQ1", "RQ2")
-    cat("$", var, "$ & ", p_value, " & ", effect_size, " & ", effect_size_interpretation, " & ", rq, " \\\\\n", sep = "")
+    if (p_value < alpha/2) {
+        cat("$", var, "$ & \textbf{", p_value, "} & ", effect_size, " & ", effect_size_interpretation, " & ", rq, " \\\\\n", sep = "")
+    }
+    else {
+        cat("$", var, "$ & ", p_value, " & - & - & ", rq, " \\\\\n", sep = "")
+    }
 }
 cat("\n")
 
