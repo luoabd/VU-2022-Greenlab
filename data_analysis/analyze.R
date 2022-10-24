@@ -28,19 +28,20 @@ df[cols_factors] <- lapply(df[cols_factors], as.factor)
 cols_numeric <- names(df %>% select_if(negate(is.factor)))
 suppressWarnings(df[cols_numeric] <- lapply(df[cols_numeric], as.numeric)) # Suppress warnings about NAs
 
-na_rows_count = 0
+removed_rows_count = 0
 nonas_df <- data.frame()
 for (row in 1:nrow(df)) {
     row <- df[row, ]
-    if (any(is.na(row))) {
-        na_rows_count = na_rows_count + 1
+    row_min <- min(row[cols_numeric]) # Values must be positive
+    if (any(is.na(row)) || 0 >= row_min) {
+        removed_rows_count = removed_rows_count + 1
     }
     else {
         nonas_df <- rbind(nonas_df, row)
     }
 }
 df <- nonas_df
-cat("Removed", sum(na_rows_count), "rows with NAs\n")
+cat("Removed", removed_rows_count, "rows with NaNs, zeros or negative values (invalid)\n")
 
 # Dataset summary
 # summary(df)
