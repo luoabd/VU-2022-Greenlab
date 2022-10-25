@@ -1,9 +1,10 @@
 #! /usr/bin/Rscript
 
-# Clear environment
-rm(list = ls())
-
 # FIRST: Install libraries using requirements.R
+
+# Set up clean, reproducible environment
+rm(list = ls())
+set.seed(123)
 
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(qqplotr))
@@ -52,9 +53,11 @@ remove_invalid <- function(df, cols_numeric) {
     df_web <- data.frame()
     for (s in unique(df$subject)) {
         df_subject <- df %>% filter(subject == s)
-        # Get rows for native apps and web apps
+        # Get rows for native apps and web apps (each in random order for unbiased selection)
         df_subject_native <- df_subject %>% filter(app_type == "native")
+        df_subject_native <- df_subject_native[sample(nrow(df_subject_native)), ]
         df_subject_web <- df_subject %>% filter(app_type == "web")
+        df_subject_web <- df_subject_web[sample(nrow(df_subject_web)), ]
         n_rows_removed_subject <- 0
         # Make same length by removing rows from the longer one and count towards n_rows_removed
         if (nrow(df_subject_native) > nrow(df_subject_web)) {
@@ -70,7 +73,6 @@ remove_invalid <- function(df, cols_numeric) {
             df_subject_web <- data.frame()
         }
         assertthat::assert_that(nrow(df_subject_native) == nrow(df_subject_web))
-        # Add to df_var_native and df_var_web
         df_native <- rbind(df_native, df_subject_native)
         df_web <- rbind(df_web, df_subject_web)
         n_rows_removed <- n_rows_removed + n_rows_removed_subject
@@ -304,15 +306,17 @@ for (i in 1:nrow(df_non_parametric_results)) {
         }
     }
     W <- df_non_parametric_results[i, "W"]
-    p_value <- fmt_float_sci_latex(df_non_parametric_results[i, "p_value"])
+    p_value <- df_non_parametric_results[i, "p_value"]
+    p_value_fmtd <- fmt_float_sci_latex(p_value)
     effect_size <- df_non_parametric_results[i, "effect_size"] 
     effect_size_interpretation <- df_non_parametric_results[i, "interpretation"]
     rq <- ifelse(i == 1, "RQ1", "RQ2")
     if (p_value < alpha/2) {
-        cat("$", var, "$ & \textbf{", p_value, "} & ", effect_size, " & ", effect_size_interpretation, " & ", rq, " \\\\\n", sep = "")
+        p_value_fmtd <- substr(p_value_fmtd, 2, nchar(p_value_fmtd) - 1)
+        cat("$", var, "$ & $\\mathbf{", p_value_fmtd, "}$ & ", effect_size, " & ", effect_size_interpretation, " & ", rq, " \\\\\n", sep = "")
     }
     else {
-        cat("$", var, "$ & ", p_value, " & - & - & ", rq, " \\\\\n", sep = "")
+        cat("$", var, "$ & ", p_value_fmtd, " & - & - & ", rq, " \\\\\n", sep = "")
     }
 }
 cat("\n")
