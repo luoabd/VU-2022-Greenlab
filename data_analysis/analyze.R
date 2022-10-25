@@ -59,11 +59,13 @@ remove_invalid <- function(df, cols_numeric) {
         df_subject_web <- df_subject %>% filter(app_type == "web")
         df_subject_web <- df_subject_web[sample(nrow(df_subject_web)), ]
         n_rows_removed_subject <- 0
+        n_rows_native <- nrow(df_subject_native)
+        n_rows_web <- nrow(df_subject_web)
         # Make same length by removing rows from the longer one and count towards n_rows_removed
-        if (nrow(df_subject_native) > nrow(df_subject_web)) {
+        if (n_rows_native > n_rows_web) {
             df_subject_native <- df_subject_native[1:nrow(df_subject_web),]
             n_rows_removed_subject <- nrow(df_subject_native) - nrow(df_subject_web)
-        } else if (nrow(df_subject_web) > nrow(df_subject_native)) {
+        } else if (n_rows_web > n_rows_native) {
             df_subject_web <- df_subject_web[1:nrow(df_subject_native),]
             n_rows_removed_subject <- nrow(df_subject_web) - nrow(df_subject_native)
         }
@@ -77,7 +79,7 @@ remove_invalid <- function(df, cols_numeric) {
         df_web <- rbind(df_web, df_subject_web)
         n_rows_removed <- n_rows_removed + n_rows_removed_subject
         cat(" - Removed ", n_rows_removed_subject, " rows for subject ", s, sep = "")
-        cat(" (", nrow(df_subject_native) + nrow(df_subject_web), " rows)\n", sep = "")
+        cat(" (", nrow(df_subject_native) + nrow(df_subject_web), " rows from ", n_rows_native, " native and ", n_rows_web, " web)\n", sep = "")
     }
     # Combine native and web apps into df
     df <- rbind(df_native, df_web)
@@ -128,15 +130,15 @@ fmt_var = c(
 
 # Subject value to plot legend mapping
 fmt_sub = c(
-    "coupang" = "Coupang",
     "espn" = "ESPN",
+    "weather" = "The Weather Channel",
     "linkedin" = "LinkedIn",
     "pinterest" = "Pinterest",
+    "coupang" = "Coupang",
     "shopee" = "Shopee",
     "soundcloud" = "SoundCloud",
     "spotify" = "Spotify",
     "twitch" = "Twitch",
-    "weather" = "The Weather Channel",
     "youtube" = "YouTube"
 )
 # For plotting
