@@ -28,20 +28,63 @@ df[cols_factors] <- lapply(df[cols_factors], as.factor)
 cols_numeric <- names(df %>% select_if(negate(is.factor)))
 suppressWarnings(df[cols_numeric] <- lapply(df[cols_numeric], as.numeric)) # Suppress warnings about NAs
 
-removed_rows_count = 0
-nonas_df <- data.frame()
-for (row in 1:nrow(df)) {
-    row <- df[row, ]
-    row_min <- min(row[cols_numeric]) # Values must be positive
-    if (any(is.na(row)) || 0 >= row_min) {
-        removed_rows_count = removed_rows_count + 1
+remove_invalid <- function(df, cols_numeric) {
+    cat("Total number of rows in dataset:", nrow(df), "\n")
+    removed_rows_count = 0
+    nonas_df <- data.frame()
+    for (row in 1:nrow(df)) {
+        row <- df[row, ]
+        row_min <- min(row[cols_numeric]) # Values must be positive
+        if (any(is.na(row)) || 0 >= row_min) {
+            removed_rows_count = removed_rows_count + 1
+        }
+        else {
+            nonas_df <- rbind(nonas_df, row)
+        }
     }
-    else {
-        nonas_df <- rbind(nonas_df, row)
+    df <- nonas_df
+    cat("Removed", removed_rows_count, "rows with NaNs, zeros or negative values (invalid)\n")
+
+    # For each subject in df_var, get all rows for native and web apps
+    cat("Ensuring same number of runs for each app type\n")
+    n_rows_removed <- 0
+    df_native <- data.frame()
+    df_web <- data.frame()
+    for (s in unique(df$subject)) {
+        df_subject <- df %>% filter(subject == s)
+        # Get rows for native apps and web apps
+        df_subject_native <- df_subject %>% filter(app_type == "native")
+        df_subject_web <- df_subject %>% filter(app_type == "web")
+        n_rows_removed_subject <- 0
+        # Make same length by removing rows from the longer one and count towards n_rows_removed
+        if (nrow(df_subject_native) > nrow(df_subject_web)) {
+            df_subject_native <- df_subject_native[1:nrow(df_subject_web),]
+            n_rows_removed_subject <- nrow(df_subject_native) - nrow(df_subject_web)
+        } else if (nrow(df_subject_web) > nrow(df_subject_native)) {
+            df_subject_web <- df_subject_web[1:nrow(df_subject_native),]
+            n_rows_removed_subject <- nrow(df_subject_web) - nrow(df_subject_native)
+        }
+        # Edge case: empty dataframes
+        if (nrow(df_subject_native) == 0 || nrow(df_subject_web) == 0) {
+            df_subject_native <- data.frame()
+            df_subject_web <- data.frame()
+        }
+        assertthat::assert_that(nrow(df_subject_native) == nrow(df_subject_web))
+        # Add to df_var_native and df_var_web
+        df_native <- rbind(df_native, df_subject_native)
+        df_web <- rbind(df_web, df_subject_web)
+        n_rows_removed <- n_rows_removed + n_rows_removed_subject
+        cat(" - Removed ", n_rows_removed_subject, " rows for subject ", s, sep = "")
+        cat(" (", nrow(df_subject_native) + nrow(df_subject_web), " rows)\n", sep = "")
     }
+    # Combine native and web apps into df
+    df <- rbind(df_native, df_web)
+    cat("Total removed ", n_rows_removed, " rows\n")
+    cat("Remaining rows: ", nrow(df), "\n\n")
+    return(df)
 }
-df <- nonas_df
-cat("Removed", removed_rows_count, "rows with NaNs, zeros or negative values (invalid)\n")
+
+df <- remove_invalid(df, cols_numeric)
 
 # Dataset summary
 # summary(df)
@@ -162,7 +205,7 @@ test_non_parametric <- function(df_var_native, df_var_web, var) {
     # Perform Wilcoxon signed-rank test
     wilcox_test <- wilcox.test(df_var_native[[var]], df_var_web[[var]], paired = T)
     cat("Wilcoxon signed-rank test: W = ", wilcox_test$statistic, ", p-value = ", wilcox_test$p.value, "\n")
-    cat("Means are ", ifelse(wilcox_test$p.value < alpha/2, "", "not "), "different\n", sep = "")
+    cat("Locations are ", ifelse(wilcox_test$p.value < alpha/2, "", "not "), "different\n", sep = "")
     # Use Cliff's delta to interpret effect size
     d <- cliff.delta(df_var_native[[var]], df_var_web[[var]], conf.level=1-alpha/2)$estimate
     # small (d = 0.147), medium (d = 0.33), and large (d = 0.474) according to https://www.bibsonomy.org/bibtex/216a5c27e770147e5796719fc6b68547d/kweiand
@@ -175,17 +218,20 @@ test_non_parametric <- function(df_var_native, df_var_web, var) {
 
 df_normality_test_results <- data.frame()
 
+
 # Data analysis per dependent variable
 for (var in cols_numeric) {
     var_title <- fmt_var[var]
     cat("========== ", var, ": ", var_title, " ==========\n", sep = "")
     df_var <- df %>% select_if(negate(is.numeric))
     df_var[[var]] <- df[[var]]
+    df_var_native <- df_var %>% filter(app_type == "native")
+    df_var_native <- df_var_native[order(df_var_native$subject),]
+    df_var_web <- df_var %>% filter(app_type == "web")
+    df_var_web <- df_var_web[order(df_var_web$subject),]
 
     cat("1. Boxplot native vs. web\n")
     plot_data(df, var, fmt_var[var])
-    df_var_native <- df_var %>% filter(app_type == "native")
-    df_var_web <- df_var %>% filter(app_type == "web")
 
     cat("2. Density plot native vs. web\n")
     plot_density(df_var_native, var, var_title)
@@ -212,20 +258,7 @@ for (var in cols_numeric) {
         # var_web_normalized <- predict(BN_obj)
     }
 
-    cat("5. Compare means of native and web\n")
-
-    # Drop value from longer (native or ) to make them equal length
-    n_dropped <- abs(nrow(df_var_native) - nrow(df_var_web))
-    if (nrow(df_var_native) > nrow(df_var_web)) {
-        df_var_native <- df_var_native %>% slice(1:(nrow(df_var_native) - n_dropped))
-    } else if (nrow(df_var_web) > nrow(df_var_native)) {
-        df_var_web <- df_var_web %>% slice(1:(nrow(df_var_web) - n_dropped))
-    }
-    if (n_dropped > 0) {
-        cat("Dropped ", n_dropped, " values from longer dataset to make them equal length\n", sep = "")
-    }
-
-
+    cat("5. Compare means/locations of native and web\n")
     if (is_normal_native && is_normal_web) {
         test_parametric(df_var_native, df_var_web, var)
     }
