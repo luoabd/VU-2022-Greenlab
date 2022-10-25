@@ -316,9 +316,24 @@ for (i in 1:nrow(df_non_parametric_results)) {
         cat("$", var, "$ & $\\mathbf{", p_value_fmtd, "}$ & ", effect_size, " & ", effect_size_interpretation, " & ", rq, " \\\\\n", sep = "")
     }
     else {
-        cat("$", var, "$ & ", p_value_fmtd, " & - & - & ", rq, " \\\\\n", sep = "")
+        cat("$", var, "$ & ", p_value_fmtd, " & n/a & n/a & ", rq, " \\\\\n", sep = "")
     }
 }
 cat("\n")
+
+cat("\nNumber of pairs of runs for LaTeX report:\n")
+
+for (s in fmt_sub) {
+    n_rows <- nrow(df %>% filter(Subject == s))
+    cat(s, " & ", n_rows / 2, " \\\\\n", sep = "")
+}
+cat("\\hdashline\n\\textbf{Total} & \\textbf{", nrow(df) / 2, "} \\\\\n\n", sep = "")
+
+
+# Compute Cohen's d for memory (native and web do not overlap)
+df_mem_native <- as.numeric((df %>% filter(app_type == "native") %>% select(mean_mem_usage))$mean_mem_usage)
+df_mem_web <- as.numeric((df %>% filter(app_type == "web") %>% select(mean_mem_usage))$mean_mem_usage)
+d <- cohen.d(df_mem_native, df_mem_web, conf.level=1-alpha/2)$estimate
+cat("Cohen's d (abs) for mean memory utilization (native and web do not overlap):", abs(d), "\n\n")
 
 warnings()
