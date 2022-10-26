@@ -29,14 +29,15 @@ df[cols_factors] <- lapply(df[cols_factors], as.factor)
 cols_numeric <- names(df %>% select_if(negate(is.factor)))
 suppressWarnings(df[cols_numeric] <- lapply(df[cols_numeric], as.numeric)) # Suppress warnings about NAs
 
-remove_invalid <- function(df, cols_numeric) {
-    cat("Total number of rows in dataset:", nrow(df), "\n")
+# Removes NaNs (and zero and negative values given "only_positive" is TRUE) from specified columns of a dataframe
+remove_invalid <- function(df, cols_numeric, only_positive_values = F) {
+    cat("Initial number of rows:", nrow(df), "\n")
     removed_rows_count = 0
     nonas_df <- data.frame()
     for (row in 1:nrow(df)) {
         row <- df[row, ]
         row_min <- min(row[cols_numeric]) # Values must be positive
-        if (any(is.na(row)) || 0 >= row_min) {
+        if (any(is.na(row)) || (only_positive_values && 0 >= row_min)) {
             removed_rows_count = removed_rows_count + 1
         }
         else {
@@ -44,9 +45,9 @@ remove_invalid <- function(df, cols_numeric) {
         }
     }
     df <- nonas_df
-    cat("Removed", removed_rows_count, "rows with NaNs, zeros or negative values (invalid)\n")
+    cat("Removed ", removed_rows_count, " rows with NaNs", ifelse(only_positive_values, ", zeros or negative valeus", ""), "\n", sep = "")
 
-    # For each subject in df_var, get all rows for native and web apps
+    # For each subject in df, get all rows for native and web apps
     cat("Ensuring same number of runs for each app type\n")
     n_rows_removed <- 0
     df_native <- data.frame()
@@ -78,8 +79,8 @@ remove_invalid <- function(df, cols_numeric) {
         df_native <- rbind(df_native, df_subject_native)
         df_web <- rbind(df_web, df_subject_web)
         n_rows_removed <- n_rows_removed + n_rows_removed_subject
-        cat(" - Removed ", n_rows_removed_subject, " rows for subject ", s, sep = "")
-        cat(" (", nrow(df_subject_native) + nrow(df_subject_web), " rows from ", n_rows_native, " native and ", n_rows_web, " web)\n", sep = "")
+        # cat(" - Removed ", n_rows_removed_subject, " rows for subject ", s, sep = "")
+        # cat(" (", nrow(df_subject_native) + nrow(df_subject_web), " rows from ", n_rows_native, " native and ", n_rows_web, " web)\n", sep = "")
     }
     # Combine native and web apps into df
     df <- rbind(df_native, df_web)
@@ -96,16 +97,30 @@ cat("Summary for LaTeX report: (native and web in same row)\n")
 df_native <- df %>% filter(app_type == "native") %>% select_if(is.numeric)
 df_web <- df %>% filter(app_type == "web") %>% select_if(is.numeric)
 
+# Filter out NaNs, zeros and negative values before applying a function
+apply_to_valid_values <- function(df, func) {
+    values <- list()
+    for (col in names(df)) {
+        column <- df[[col]]
+        # Remove NaNs and zero or negative values
+        column <- column[!is.na(column)]
+        column <- column[column > 0]
+        aggregated <- func(column)
+        values <- cbind(values, aggregated)
+    }
+    return(values)
+}
+
 print_latex_tab_row <- function(name, func) {
     cat("\\textbf{", name, "} & ", sep = "")
-    values <- apply(df_native, 2, func)
+    values <- apply_to_valid_values(df_native, func)
     for (i in 1:length(values)) {
-        cat(values[i], if (i == length(values)) "" else "& ")
+        cat(values[[i]], if (i == length(values)) "" else "& ")
     }
     cat("& ")
-    values <- apply(df_web, 2, func)
+    values <- apply_to_valid_values(df_web, func)
     for (i in 1:length(values)) {
-        cat(values[i], if (i == length(values)) "" else "& ")
+        cat(values[[i]], if (i == length(values)) "" else "& ")
     }
     cat("\\\\\n")
 }
@@ -229,10 +244,19 @@ for (var in cols_numeric) {
     cat("========== ", var, ": ", var_title, " ==========\n", sep = "")
     df_var <- df %>% select_if(negate(is.numeric))
     df_var[[var]] <- df[[var]]
+    # Remove any values for var which are NaN, zero or negative
+    df_var <- df_var %>% filter(!is.na(.data[[var]])) %>% filter(.data[[var]] > 0)
     df_var_native <- df_var %>% filter(app_type == "native")
     df_var_native <- df_var_native[order(df_var_native$subject),]
     df_var_web <- df_var %>% filter(app_type == "web")
     df_var_web <- df_var_web[order(df_var_web$subject),]
+
+    # Ensure that the number of samples is the same for both app types (remove from the larger one)
+    if (nrow(df_var_native) > nrow(df_var_web)) {
+        df_var_native <- df_var_native[1:nrow(df_var_web),]
+    } else if (nrow(df_var_web) > nrow(df_var_native)) {
+        df_var_web <- df_var_web[1:nrow(df_var_native),]
+    }
 
     cat("1. Boxplot native vs. web\n")
     plot_data(df, var, fmt_var[var])
@@ -330,6 +354,17 @@ for (s in fmt_sub) {
     cat(s, " & ", n_rows / 2, " \\\\\n", sep = "")
 }
 cat("\\hdashline\n\\textbf{Total} & \\textbf{", nrow(df) / 2, "} \\\\\n\n", sep = "")
+
+# This is a summary containing only the numbers of pairs of valid runs per subject (network traffic often has 0s)
+cat("\n\nNumber of pairs of runs with valid data for network_traffic_volume for LaTeX report:\n")
+{ sink("/dev/null")
+df2 <- remove_invalid(df, cols_numeric, only_positive_values = T)
+sink(); }
+for (s in fmt_sub) {
+    n_rows <- nrow(df2 %>% filter(Subject == s))
+    cat(s, " & ", n_rows / 2, " \\\\\n", sep = "")
+}
+cat("\\hdashline\n\\textbf{Total} & \\textbf{", nrow(df2) / 2, "} \\\\\n\n", sep = "")
 
 
 # Compute Cohen's d for memory (native and web do not overlap)
