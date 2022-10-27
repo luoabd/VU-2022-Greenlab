@@ -10,7 +10,8 @@ def main(device: Device, *args: tuple, **kwargs: dict):
             package='com.android.chrome'
         print(f'Closing app from last run ({package})')
         device.shell(f'am force-stop {package}')
-        device.shell('monkey -p com.espn.score_center -c android.intent.category.LAUNCHER 1')
-        time.sleep(5)
+        # Band aid fix for ESPN app not starting
+        # device.shell('monkey -p com.espn.score_center -c android.intent.category.LAUNCHER 1')
+        # time.sleep(5)
     except:
         pass
