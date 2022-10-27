@@ -7,12 +7,17 @@ import time
 import logging
 
 LOGGER = logging.getLogger()                                                                                                                                                                                          
-                                                                                                                                                                                                                 
+
+# Main interaction script for experiment run
+# The actual interaction is outsourced to a bash script in the interactions folder
+# The name of the bash script which will be run is the package name of the application or the FQDN of the website
+# with all dots replaced by underscores and ending in .sh
+# For debugging/development, run the bash script directly
 def main(device: Device, *args, **kwargs) -> None:                                                                                                                                                               
     LOGGER.debug(args)                                                                                                                                                                                           
     LOGGER.debug(kwargs)                                                                                                                                                                                         
                                                                                                                                                                                                                  
-    experiment: Experiment = args[0] # can be useful if you want to differentiate actions per subject                                                                                                            
+    experiment: Experiment = args[0]
     current_run: Dict = experiment.get_experiment()                                                                                                                                                              
     LOGGER.debug(current_run)                                                                                                                                                                                  
 

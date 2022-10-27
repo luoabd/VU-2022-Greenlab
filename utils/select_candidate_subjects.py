@@ -8,8 +8,6 @@ from pathlib import Path
 
 SEED = 420
 
-# TODO: add comments
-
 if len(sys.argv) != 3:
     print(
         f'Usage: {__file__.split("/")[-1]} <path to Google-Playstore.csv> <path to tranco.csv>')

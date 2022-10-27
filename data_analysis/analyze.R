@@ -1,23 +1,26 @@
 #! /usr/bin/Rscript
 
-# FIRST: Install libraries using requirements.R
+# NOTE: First install libraries using requirements.R
 
 # Set up clean, reproducible environment
 rm(list = ls())
 set.seed(123)
 
+# Load libraries
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(qqplotr))
 library(effsize)
 library(bestNormalize)
 suppressPackageStartupMessages(library(showtext))
 
+# Optional font for LaTeX report
 textTheme <- theme()
 tryCatch({
     font_add("CMU", "/usr/share/fonts/cm-unicode/cmunrm.otf")
     showtext_auto()
     textTheme <- theme(text=element_text(family="CMU"))
 })
+# Delete old plots
 unlink("plots/*", recursive = TRUE)
 dir.create("plots", showWarnings = FALSE)
 
@@ -36,7 +39,7 @@ remove_invalid <- function(df, cols_numeric, only_positive_values = F) {
     nonas_df <- data.frame()
     for (row in 1:nrow(df)) {
         row <- df[row, ]
-        row_min <- min(row[cols_numeric]) # Values must be positive
+        row_min <- min(row[cols_numeric]) # Values must be positive if only_positive_values is TRUE
         if (any(is.na(row)) || (only_positive_values && 0 >= row_min)) {
             removed_rows_count = removed_rows_count + 1
         }
@@ -89,9 +92,10 @@ remove_invalid <- function(df, cols_numeric, only_positive_values = F) {
     return(df)
 }
 
+# Remove NaNs
 df <- remove_invalid(df, cols_numeric)
 
-# Dataset summary
+# Dataset summary (descriptive statistics)
 # summary(df)
 cat("Summary for LaTeX report: (native and web in same row)\n")
 df_native <- df %>% filter(app_type == "native") %>% select_if(is.numeric)
@@ -110,7 +114,7 @@ apply_to_valid_values <- function(df, func) {
     }
     return(values)
 }
-
+# Print a single row for the summary table for the LaTeX report
 print_latex_tab_row <- function(name, func) {
     cat("\\textbf{", name, "} & ", sep = "")
     values <- apply_to_valid_values(df_native, func)
@@ -165,9 +169,11 @@ SubjectColors <- c(
     "#e6194B", "#f58231", "#f58231", "#3cb44b", 
     "#42d4f4", "#42d4f4") # By category for sorted Subject
 
+# Alpha value for statistical significance
 alpha <- 0.05
 cat("\nFor all tests: alpha =", alpha, " (alpha/2 for two-sided tests)\n\n")
 
+# Creates a boxplot for the given variable between native and web apps with a jitter overlay for each subject
 plot_data <- function(df, var, var_title) {
     ggplot(df_var, aes(x = app_type, y = .data[[var]])) +
         # geom_violin(trim = T) +
@@ -183,6 +189,7 @@ plot_data <- function(df, var, var_title) {
     suppressMessages(ggsave(filename=paste0("plots/boxplot_", var, ".pdf")))
 }
 
+# Creates a density plot for the given variable between native and web apps
 plot_density <- function(df, var, var_title) {
     ggplot(df_var, aes(x = .data[[var]], fill = app_type)) +
         geom_density(alpha = 0.5) +
@@ -193,6 +200,7 @@ plot_density <- function(df, var, var_title) {
     suppressMessages(ggsave(filename=paste0("plots/density_", var, ".pdf")))
 }
 
+# Creates a quantile-quantile plot for the given variable
 plot_qq <- function(df, var, filename) {
     ggplot(data = df, mapping = aes(sample = .data[[var]])) +
         stat_qq_band() +
@@ -206,6 +214,7 @@ plot_qq <- function(df, var, filename) {
     suppressMessages(ggsave(filename=filename))
 }
 
+# Paired t-test for the given variable (Only use on normally distributed data !!!)
 test_parametric <- function(df_var_native, df_var_web, var) {
     # Perform paired t-test
     t_test <- t.test(df_var_native[[var]], df_var_web[[var]], paired = T)
@@ -218,8 +227,10 @@ test_parametric <- function(df_var_native, df_var_web, var) {
     cat("Effect size using Cohen's d: estimate = ", d, " (", effect, ")\n", sep = "")
 }
 
+# Dataframe used to store the results of the non-parametric tests for later output
 df_non_parametric_results <- data.frame()
 
+# Wilcoxon signed-rank test for the given variable (Use on non-normally distributed data)
 test_non_parametric <- function(df_var_native, df_var_web, var) {
     # Perform Wilcoxon signed-rank test
     wilcox_test <- wilcox.test(df_var_native[[var]], df_var_web[[var]], paired = T)
@@ -235,6 +246,7 @@ test_non_parametric <- function(df_var_native, df_var_web, var) {
         data.frame(var = var, W = wilcox_test$statistic, p_value = wilcox_test$p.value, effect_size=d, interpretation=effect))
 }
 
+# Dataframe used to store the results of the Shapiro-Wilk test for later output
 df_normality_test_results <- data.frame()
 
 
@@ -296,6 +308,7 @@ for (var in cols_numeric) {
     cat("\n")
 }
 
+# Scientific notation for LaTeX
 fmt_float_sci_latex <- function(x, mantissa_digits = 3) {
     factor <- 10^floor(log10(abs(x)))
     exponent <- floor(log10(factor))
@@ -348,7 +361,6 @@ for (i in 1:nrow(df_non_parametric_results)) {
 cat("\n")
 
 cat("\nNumber of pairs of runs for LaTeX report:\n")
-
 for (s in fmt_sub) {
     n_rows <- nrow(df %>% filter(Subject == s))
     cat(s, " & ", n_rows / 2, " \\\\\n", sep = "")

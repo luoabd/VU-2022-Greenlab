@@ -5,6 +5,8 @@ import os
 
 # Granular cleanup for web
 # In Android Runner, set clear_data to False in WebExperiment.py#L86
+
+
 # Instead, configure Firefox settings to clear selected data on exit
 # Quit Firefox (--> Triggers cleanup)
 def firefox_cleanup(device: Device):
