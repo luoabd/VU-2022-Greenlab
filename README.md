@@ -1,7 +1,7 @@
 # VU-2022-Greenlab (App vs. Web)
 VU Green Lab replication package for [our report](https://www.overleaf.com/read/jcwgrxgxtrnb).
 
-**Note!** The scripts requires a unix-like system and `bash` to be the default shell of the user.
+**Note!** The scripts requires a unix-like system (Linux or OSX) and `bash`. (It is also recommended to set `bash` as the default shell of the user.)
 
 ## Utilities
 **Note!** All scripts are intended for use with only a single device connected over ADB.
@@ -14,7 +14,7 @@ The script `utils/before_run.sh` ensures that all experiments are conducted usin
 Use `utils/tap_text.sh` to click on a UI element with text matching a given pattern through ADB.
 Use `utils/clear_cache.sh` to clear the cache (but not the data) of an application.
 Use `utils/current_app.sh` and `utils/current_url.sh` to query the currently running native or web app respectively over ADB.
-Use `utils/run_to_csv.py` to aggregate all measurements in a single table. 
+Use `utils/run_to_csv.py` to aggregate all measurements in a single table. (The output provided in `raw_results.tar.gz` was used to to generate `data_analysis/experiment_results`.) 
 
 ## Experiment
 The experiment can be run using (a [slightly modified](https://github.com/rubenhorn/android-runner/commit/08efab9aa556a5662fee3227b6d6f468ee1a4d4f) version of) [Android Runner](https://github.com/S2-group/android-runner) with `python3 <path to android-runner> experiments/config_<part>.json`.
@@ -39,4 +39,4 @@ All corresponding scripts are located in `analysis/`.
 8. Obtain and install apps from list in `apks/summary.txt`
 9. Run experiment using `python3 <path to android-runner> experiments/config_<part>.json`
 10. Generate CSV using `utils/run_to_csv.py experiments/output/<experiment> >> data_analysis/experiment_results.csv` (Make sure to remove the header from every subsequent run by appending `--no-header` to the command)
-11. Run data analysis using `data_analysis/<analysis>.R`
+11. Run data analysis using `data_analysis/<analysis>.R` (Figures are stored in `data_analysis/plots/`, other results and LaTeX tables are printed to the console.)
