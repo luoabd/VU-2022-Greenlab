@@ -371,6 +371,23 @@ cat("\\hdashline\n\\textbf{Total} & \\textbf{", nrow(df2) / 2, "} \\\\\n\n", sep
 df_mem_native <- as.numeric((df %>% filter(app_type == "native") %>% select(mean_mem_usage))$mean_mem_usage)
 df_mem_web <- as.numeric((df %>% filter(app_type == "web") %>% select(mean_mem_usage))$mean_mem_usage)
 d <- cohen.d(df_mem_native, df_mem_web, conf.level=1-alpha/2)$estimate
-cat("Cohen's d (abs) for mean memory utilization (native and web do not overlap):", abs(d), "\n\n")
+cat("Cohen's d (abs) for mean memory utilization (native and web do not overlap):", abs(d), "\n")
+# Compute absolute difference between native and web in GB
+mean_mem_native <- mean(df_mem_native)
+mean_mem_web <- mean(df_mem_web)
+cat("Mean absolute difference for memory usage between native and web in GB:", abs(mean_mem_native - mean_mem_web) / 1000000, "\n")
+
+# Compute the percentage difference between native and web for energy consumption and CPU usage
+df_ec_native <- as.numeric((df %>% filter(app_type == "native") %>% select(energy_consumption))$energy_consumption)
+df_ec_web <- as.numeric((df %>% filter(app_type == "web") %>% select(energy_consumption))$energy_consumption)
+df_ec_native_mean <- mean(df_ec_native)
+df_ec_web_mean <- mean(df_ec_web)
+cat("Difference between native and web for mean energy consumption: ", (df_ec_web_mean - df_ec_native_mean) / df_ec_native_mean * 100, "%\n", sep="")
+df_cpu_native <- as.numeric((df %>% filter(app_type == "native") %>% select(mean_cpu_load))$mean_cpu_load)
+df_cpu_web <- as.numeric((df %>% filter(app_type == "web") %>% select(mean_cpu_load))$mean_cpu_load)
+df_cpu_native_mean <- mean(df_cpu_native)
+df_cpu_web_mean <- mean(df_cpu_web)
+cat("Difference between native and web for mean mean CPU usage: ", (df_cpu_web_mean - df_cpu_native_mean) / df_cpu_native_mean * 100, "%\n\n", sep="")
+cat("\n\n")
 
 warnings()
